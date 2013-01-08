@@ -1,0 +1,9 @@
+Simple Text File
+----------------
+This is a simple text file, with a couple of lines used for testing.
+
+This character should be deleted:X
+The X character should be deleted here:XY
+
+These two lines should be
+merged into a single line.

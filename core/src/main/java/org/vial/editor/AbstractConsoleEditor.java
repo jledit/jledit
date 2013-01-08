@@ -38,7 +38,6 @@ import org.vial.utils.Closeables;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.LinkedList;
@@ -62,7 +61,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     private int frameColumn = 1;
     private String encoding;
     private final Terminal terminal;
-    private OutputStreamWriter out;
     private KeyMap keys;
 
     private boolean running = false;
@@ -91,7 +89,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         this.file = fileName != null && !fileName.isEmpty() ? new File(fileName) : null;
         this.encoding = encoding != null ? encoding : Configuration.getEncoding();
         this.terminal = term != null ? term : TerminalFactory.get();
-        this.out = new OutputStreamWriter(terminal.wrapOutIfNeeded(AnsiConsole.out), this.encoding);
         this.delegate = delegate;
     }
 
@@ -148,7 +145,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         running = false;
         Closeables.closeQuitely(reader);
         Closeables.closeQuitely(in);
-        Closeables.closeQuitely(out);
     }
 
     /**

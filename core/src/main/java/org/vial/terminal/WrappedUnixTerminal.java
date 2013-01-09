@@ -26,7 +26,6 @@ public class WrappedUnixTerminal extends UnixTerminal {
 
     @Override
     public void init() throws Exception {
-        super.init();
         getSettings().set("intr undef");
         //We want to be able to use CTRL-Z for undo
         getSettings().set("susp undef");
@@ -42,5 +41,10 @@ public class WrappedUnixTerminal extends UnixTerminal {
     @Override
     public void restore() throws Exception {
         delegate.reset();
+    }
+
+    @Override
+    public void reset() throws Exception {
+        init();
     }
 }

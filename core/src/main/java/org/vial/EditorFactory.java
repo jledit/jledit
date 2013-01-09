@@ -14,25 +14,48 @@
 
 package org.vial;
 
+import jline.Terminal;
 import org.vial.editor.ConsoleEditor;
 
 public interface EditorFactory {
 
     /**
      * Creates a {@link ConsoleEditor}.
+     *
      * @return
      */
     ConsoleEditor create() throws EditorInitializationException;
 
     /**
+     * Creates a {@link ConsoleEditor} using the specified {@link Terminal}.
+     *
+     * @return
+     * @throws EditorInitializationException
+     */
+    ConsoleEditor create(Terminal terminal) throws EditorInitializationException;
+
+
+    /**
      * Creates a {@link ConsoleEditor} based on the specified flavor.
+     *
      * @param flavor
      * @return
      */
     ConsoleEditor create(String flavor) throws EditorInitializationException;
 
     /**
+     * Creates a {@link ConsoleEditor} based on the specified flavor & {@link Terminal}.
+     *
+     * @param flavor
+     * @param terminal
+     * @return
+     * @throws EditorInitializationException
+     */
+    ConsoleEditor create(String flavor, Terminal terminal) throws EditorInitializationException;
+
+    /**
      * Binds the specified flavor to the specified class.
+     *
      * @param flavor
      * @param editorClass
      */
@@ -40,6 +63,7 @@ public interface EditorFactory {
 
     /**
      * Unbinds flavor.
+     *
      * @param flavor
      */
     void unbind(String flavor);

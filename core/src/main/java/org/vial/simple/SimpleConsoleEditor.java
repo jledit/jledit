@@ -14,6 +14,7 @@
 
 package org.vial.simple;
 
+import jline.Terminal;
 import jline.console.KeyMap;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
@@ -44,8 +45,7 @@ import org.vial.editor.Editor;
 import org.vial.editor.EditorOperation;
 import org.vial.editor.EditorOperationType;
 import org.vial.editor.internal.StringEditor;
-import org.vial.utils.KeyMaps;
-import org.vial.utils.OperatingSystem;
+import org.vial.utils.internal.KeyMaps;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -60,12 +60,9 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
     private final Map<String, String> supportedOperations = new LinkedHashMap<String, String>();
     private final List<String> helpLines = new LinkedList<String>();
 
-    public SimpleConsoleEditor() throws IOException {
-        this(new StringEditor(), null);
-    }
 
-    public SimpleConsoleEditor(Editor<String> delegate, String fileName) throws IOException {
-        super(delegate, fileName);
+    public SimpleConsoleEditor(Terminal terminal) throws Exception {
+        super(terminal);
         setKeys(createKeyMap());
         supportedOperations.put("^O", "Open");
         supportedOperations.put("^X", "Quit");

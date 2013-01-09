@@ -15,9 +15,12 @@
 package org.vial;
 
 
+import jline.Terminal;
 import org.vial.editor.ConsoleEditor;
 import org.vial.utils.Resources;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -41,6 +44,64 @@ public class ConcreteEditorFactory implements EditorFactory {
         return create(DEFAULT_FLAVOR);
     }
 
+    /**
+     * Creates a {@link org.vial.editor.ConsoleEditor} using the specified {@link jline.Terminal}.
+     *
+     * @return
+     * @throws org.vial.EditorInitializationException
+     *
+     */
+    @Override
+    public ConsoleEditor create(Terminal terminal) throws EditorInitializationException {
+        return create(DEFAULT_FLAVOR, terminal);
+    }
+
+    /**
+     * Creates a {@link ConsoleEditor} based on the specified flavor.
+     *
+     * @param flavor
+     * @return
+     */
+    @Override
+    public ConsoleEditor create(String flavor) throws EditorInitializationException {
+        return create(flavor, null);
+    }
+
+    /**
+     * Creates a {@link org.vial.editor.ConsoleEditor} based on the specified flavor & {@link jline.Terminal}.
+     *
+     * @param flavor
+     * @param terminal
+     * @return
+     * @throws org.vial.EditorInitializationException
+     *
+     */
+    @Override
+    public ConsoleEditor create(String flavor, Terminal terminal) throws EditorInitializationException {
+        if (flavorMap.containsKey(flavor)) {
+            Class<? extends ConsoleEditor> editorClass = flavorMap.get(flavor);
+            try {
+                return instantiate(editorClass, terminal);
+            } catch (Exception e) {
+                throw new EditorInitializationException("Failed to create Editor instance of class:" + editorClass.getName(), e);
+            }
+        } else {
+            Class<? extends ConsoleEditor> editorClass = resolve(flavor);
+            if (editorClass != null) {
+                flavorMap.put(flavor, editorClass);
+                return create(flavor, terminal);
+            } else {
+                throw new EditorInitializationException("Unknown flavor:" + flavor);
+            }
+        }
+    }
+
+    /**
+     * Resolves the {@link ConsoleEditor} class for the specified flavor.
+     * @param flavor
+     * @return
+     * @throws EditorInitializationException
+     */
     private Class<? extends ConsoleEditor> resolve(String flavor) throws EditorInitializationException {
         ClassLoader classLoader = getClass().getClassLoader();
         try {
@@ -65,29 +126,18 @@ public class ConcreteEditorFactory implements EditorFactory {
     }
 
     /**
-     * Creates a {@link ConsoleEditor} based on the specified flavor.
-     *
-     * @param flavor
+     * Instantiates the {@link ConsoleEditor}.
+     * @param editorClass
+     * @param terminal
      * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws InstantiationException
+     * @throws NoSuchMethodException
      */
-    @Override
-    public ConsoleEditor create(String flavor) throws EditorInitializationException {
-        if (flavorMap.containsKey(flavor)) {
-            Class<? extends ConsoleEditor> editorClass = flavorMap.get(flavor);
-            try {
-                return editorClass.newInstance();
-            } catch (Exception e) {
-                throw new EditorInitializationException("Failed to create Editor instance of class:" + editorClass.getName(), e);
-            }
-        } else {
-            Class<? extends ConsoleEditor> editorClass = resolve(flavor);
-            if (editorClass != null) {
-                flavorMap.put(flavor, editorClass);
-                return create(flavor);
-            } else {
-                throw new EditorInitializationException("Unknown flavor:" + flavor);
-            }
-        }
+    private ConsoleEditor instantiate(Class<? extends ConsoleEditor> editorClass, Terminal terminal) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+        Constructor constructor = editorClass.getConstructor(Terminal.class);
+        return (ConsoleEditor) constructor.newInstance(terminal);
     }
 
     /**

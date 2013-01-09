@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.vial.utils;
+package org.vial.utils.internal;
 
 import jline.console.KeyMap;
 import org.vial.editor.EditorOperationType;

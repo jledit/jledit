@@ -30,7 +30,8 @@ import org.vial.command.CommandFactory;
 import org.vial.command.undo.UndoContext;
 import org.vial.command.undo.UndoContextAware;
 import org.vial.command.undo.UndoableCommand;
-import org.vial.terminal.UnixEditorTerminal;
+import org.vial.editor.internal.StringEditor;
+import org.vial.terminal.TerminalWrapper;
 import org.vial.theme.DefaultTheme;
 import org.vial.theme.Theme;
 import org.vial.utils.Closeables;
@@ -80,23 +81,15 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
     private String highLight;
 
-    private Editor<String> delegate;
+    private Editor<String> delegate = new StringEditor();
     private Theme theme = new DefaultTheme();
 
-    public AbstractConsoleEditor(Editor<String> delegate, String fileName) throws IOException {
-        this(null, null, delegate);
-        this.file = fileName != null && !fileName.isEmpty() ? new File(fileName) : null;
-    }
-
-    public AbstractConsoleEditor(final String fileName, final Terminal term, Editor<String> delegate) throws IOException {
-        jline.TerminalFactory.registerFlavor(jline.TerminalFactory.Flavor.UNIX, UnixEditorTerminal.class);
-        this.file = fileName != null && !fileName.isEmpty() ? new File(fileName) : null;
+    public AbstractConsoleEditor(final Terminal term) throws Exception {
         this.encoding = encoding != null ? encoding : Configuration.getEncoding();
-        this.terminal = term != null ? term : TerminalFactory.get();
-        this.delegate = delegate;
+        this.terminal = term != null ? TerminalWrapper.wrap(term) : TerminalFactory.get();
     }
 
-    public final void init() throws IOException {
+    public final void init() throws Exception {
         this.escapeTimeout = DEFAULT_ESCAPE_TIMEOUT;
         boolean nonBlockingEnabled =
                 escapeTimeout > 0L
@@ -115,6 +108,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
         this.in = new NonBlockingInputStream(wrapped, nonBlockingEnabled);
         this.reader = new InputStreamReader(this.in, Charset.defaultCharset());
+        this.terminal.reset();
     }
 
     /**

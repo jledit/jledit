@@ -12,10 +12,11 @@
  * limitations under the License.
  */
 
-package org.vial.utils;
+package org.vial.utils.internal;
 
 
 import org.mozilla.universalchardet.UniversalDetector;
+import org.vial.utils.Closeables;
 
 import java.io.File;
 import java.io.FileInputStream;

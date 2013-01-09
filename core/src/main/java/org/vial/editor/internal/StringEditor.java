@@ -16,7 +16,7 @@ package org.vial.editor.internal;
 
 
 import org.vial.editor.Editor;
-import org.vial.utils.Charsets;
+import org.vial.utils.internal.Charsets;
 import org.vial.utils.Files;
 
 import java.io.File;

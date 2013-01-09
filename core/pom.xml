@@ -37,6 +37,7 @@
         <osgi.private>
             org.mozilla.universalchardet*,
             org.vial.utils,
+            org.vial.utils.internal,
             org.vial.collection,
             org.vial.simple,
             org.vial.editor.internal,

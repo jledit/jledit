@@ -14,33 +14,19 @@
 
 package org.vial.terminal;
 
+
 import jline.UnixTerminal;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+public class WrappedUnixTerminal extends UnixTerminal {
+    private final UnixTerminal delegate;
 
-/**
- * This is a special {@link UnixTerminal} that allows access to special characters
- * used by the editor, such as CTRL-C, CTRL-Z & CTRL-S.
- */
-public class UnixEditorTerminal extends UnixTerminal {
-
-    private Set<String> defaults = new LinkedHashSet<String>();
-
-    public UnixEditorTerminal() throws Exception {
-        super();
+    WrappedUnixTerminal(UnixTerminal delegate) throws Exception {
+        this.delegate = delegate;
     }
 
     @Override
     public void init() throws Exception {
         super.init();
-        //Store default values so that we can reuse them when restoring.
-        defaults.add(getSettings().get("intr"));
-        defaults.add(getSettings().get("susp"));
-        defaults.add(getSettings().get("stop"));
-        defaults.add(getSettings().get("discard"));
-        defaults.add(getSettings().get("lnext"));
-
         getSettings().set("intr undef");
         //We want to be able to use CTRL-Z for undo
         getSettings().set("susp undef");
@@ -52,11 +38,9 @@ public class UnixEditorTerminal extends UnixTerminal {
         getSettings().set("lnext undef");
     }
 
+
     @Override
     public void restore() throws Exception {
-        for (String setting : defaults) {
-            getSettings().set(setting);
-        }
-        super.restore();
+        delegate.reset();
     }
 }

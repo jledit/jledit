@@ -150,17 +150,9 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
             case NEWLINE:
                 return new NewLineCommand(this);
             case BACKSAPCE:
-                if (OperatingSystem.isOsx()) {
-                    return new DeleteCommand(this);
-                } else {
-                    return new BackspaceCommand(this);
-                }
+                return new BackspaceCommand(this);
             case DELETE:
-                if (OperatingSystem.isOsx()) {
-                    return new BackspaceCommand(this);
-                } else {
-                    return new DeleteCommand(this);
-                }
+                return new DeleteCommand(this);
             case PASTE:
                 return new PasteCommand(this);
             //Cursor operations
@@ -210,27 +202,27 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
                 null,                               /* Control-C */
                 null,                               /* Control-D */
                 null,                               /* Control-E */
-                EditorOperationType.FIND,               /* Control-F */
+                EditorOperationType.FIND,           /* Control-F */
                 null,                               /* Control-G */
-                null,                               /* Control-H */
+                EditorOperationType.BACKSAPCE,      /* Control-H */
                 null,                               /* Control-I */
-                EditorOperationType.NEWLINE,            /* Control-J */
+                EditorOperationType.NEWLINE,        /* Control-J */
                 null,                               /* Control-K */
                 null,                               /* Control-L */
-                EditorOperationType.NEWLINE,            /* Control-M */
-                EditorOperationType.FIND_NEXT,          /* Control-N */
-                EditorOperationType.OPEN,               /* Control-O */
-                EditorOperationType.FIND_PREVIOUS,      /* Control-P */
-                EditorOperationType.QUIT,               /* Control-Q */
-                EditorOperationType.REDO,               /* Control-R */
-                EditorOperationType.SAVE,               /* Control-S */
+                EditorOperationType.NEWLINE,        /* Control-M */
+                EditorOperationType.FIND_NEXT,      /* Control-N */
+                EditorOperationType.OPEN,           /* Control-O */
+                EditorOperationType.FIND_PREVIOUS,  /* Control-P */
+                EditorOperationType.QUIT,           /* Control-Q */
+                EditorOperationType.REDO,           /* Control-R */
+                EditorOperationType.SAVE,           /* Control-S */
                 null,                               /* Control-T */
-                EditorOperationType.UNDO,               /* Control-U */
-                EditorOperationType.PASTE,              /* Control-V */
+                EditorOperationType.UNDO,           /* Control-U */
+                EditorOperationType.PASTE,          /* Control-V */
                 null,                               /* Control-W */
-                EditorOperationType.QUIT,               /* Control-X */
+                EditorOperationType.QUIT,           /* Control-X */
                 null,                               /* Control-Y */
-                EditorOperationType.UNDO,               /* Control-Z */
+                EditorOperationType.UNDO,           /* Control-Z */
                 null,                               /* Control-[ */
                 null,                               /* Control-\ */
                 null,                               /* Control-] */
@@ -245,9 +237,7 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
         for (char c = 32; c < 256; c++) {
             simpleKeyMap.bind(Character.toString(c), EditorOperationType.TYPE);
         }
-
-        simpleKeyMap.bind(Character.toString((char) 8), EditorOperationType.BACKSAPCE);
-        simpleKeyMap.bind(Character.toString((char) 127), EditorOperationType.DELETE);
+        simpleKeyMap.bind(Character.toString((char) 127), EditorOperationType.BACKSAPCE);
         KeyMaps.bindArrowKeys(simpleKeyMap);
         return simpleKeyMap;
     }

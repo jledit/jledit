@@ -53,6 +53,10 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
     public static final String EDITOR_NAME = "Vial";
     public static final String DIRTY_SIGN = "*";
+    public static final int ESCAPE = 27;
+    public static final int DEFAULT_ESCAPE_TIMEOUT = 100;
+    public static final int READ_EXPIRED = -2;
+
     private final UndoContext undoContext = new UndoContext();
 
     //The line inside the scrolling frame.
@@ -93,7 +97,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     }
 
     public final void init() throws IOException {
-        this.escapeTimeout = 100;
+        this.escapeTimeout = DEFAULT_ESCAPE_TIMEOUT;
         boolean nonBlockingEnabled =
                 escapeTimeout > 0L
                         && terminal.isSupported()
@@ -320,10 +324,10 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             }
 
             if (o instanceof KeyMap) {
-                if (c == 27
+                if (c == ESCAPE
                         && pushBackChar.isEmpty()
                         && in.isNonBlockingEnabled()
-                        && in.peek(escapeTimeout) == -2) {
+                        && in.peek(escapeTimeout) == READ_EXPIRED) {
                     o = ((KeyMap) o).getAnotherKey();
                     if (o == null || o instanceof KeyMap) {
                         continue;
@@ -510,8 +514,9 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     }
 
     public void moveUp(int offset) {
+        LinkedList<String> toDisplayLines = new LinkedList<String>();
         for (int i = 0; i < offset; i++) {
-            LinkedList<String> toDisplayLines = new LinkedList<String>();
+            toDisplayLines.clear();
             String currentLine = getContent(getLine());
             toDisplayLines.addAll(toDisplayLines(currentLine));
             //Remove already shown lines
@@ -544,8 +549,9 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     }
 
     public void moveDown(int offset) {
+        LinkedList<String> toDisplayLines = new LinkedList<String>();
         for (int i = 0; i < offset; i++) {
-            LinkedList<String> toDisplayLines = new LinkedList<String>();
+            toDisplayLines.clear();
             String currentLine = getContent(getLine());
             toDisplayLines.addAll(toDisplayLines(currentLine));
             //Remove already shown lines

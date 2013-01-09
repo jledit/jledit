@@ -15,7 +15,11 @@
 package org.vial.utils;
 
 
-public class OperatingSystem {
+public final class OperatingSystem {
+
+    private OperatingSystem() {
+        //Utility Class
+    }
 
     private static final String MAC = "mac";
     private static final String OPERATING_SYSTEM = System.getProperty("os.name").toLowerCase();

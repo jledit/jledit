@@ -19,8 +19,6 @@ import org.vial.editor.EditorOperationType;
 
 public final class KeyMaps {
 
-    private static String Oper = System.getProperty("os.name").toLowerCase();
-
     private KeyMaps() {
         //Utility Class
     }

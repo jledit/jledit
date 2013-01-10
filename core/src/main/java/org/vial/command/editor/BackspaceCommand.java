@@ -38,7 +38,6 @@ public class BackspaceCommand extends AbstractUndoableCommand {
     public void undo() {
         super.undo();
         editor.put(deleted);
-        editor.flush();
     }
 
 }

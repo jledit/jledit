@@ -15,6 +15,7 @@
 package org.vial.command.undo;
 
 import org.vial.command.Command;
+import org.vial.editor.ConsoleEditor;
 import org.vial.editor.Editor;
 
 public class UndoCommand implements UndoContextAware, Command {
@@ -22,12 +23,12 @@ public class UndoCommand implements UndoContextAware, Command {
     private UndoContext context;
     private final Editor editor;
 
-    public UndoCommand(Editor editor) {
+    public UndoCommand(ConsoleEditor editor) {
         this.context = new UndoContext();
         this.editor = editor;
     }
 
-    public UndoCommand(Editor editor, UndoContext context) {
+    public UndoCommand(ConsoleEditor editor, UndoContext context) {
         this.editor = editor;
         this.context = context;
     }

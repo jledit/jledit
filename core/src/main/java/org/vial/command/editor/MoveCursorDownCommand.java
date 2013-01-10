@@ -36,6 +36,5 @@ public class MoveCursorDownCommand implements Command {
         editor.moveDown(number);
         editor.refreshHeader();
         editor.refreshFooter();
-        editor.flush();
     }
 }

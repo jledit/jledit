@@ -28,13 +28,11 @@ public class NewLineCommand extends AbstractUndoableCommand {
         editor.setDirty(true);
         super.execute();
         editor.newLine();
-        editor.flush();
     }
 
     @Override
     public void undo() {
         super.undo();
         editor.mergeLine();
-        editor.flush();
     }
 }

@@ -29,6 +29,5 @@ public class MoveCursorToHomeCommand implements Command {
     @Override
     public void execute() {
         editor.home();
-        editor.flush();
     }
 }

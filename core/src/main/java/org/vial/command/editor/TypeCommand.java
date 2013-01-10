@@ -30,7 +30,6 @@ public class TypeCommand extends AbstractUndoableCommand {
     public void execute() {
         editor.put(str);
         editor.setDirty(true);
-        editor.flush();
         super.execute();
 
     }
@@ -41,6 +40,5 @@ public class TypeCommand extends AbstractUndoableCommand {
         for (int i = 0; i < str.length(); i++) {
             editor.backspace();
         }
-        editor.flush();
     }
 }

@@ -29,6 +29,5 @@ public class MoveCursorToEndCommand implements Command {
     @Override
     public void execute() {
         editor.end();
-        editor.flush();
     }
 }

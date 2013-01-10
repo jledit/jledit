@@ -45,6 +45,7 @@ import org.vial.editor.Editor;
 import org.vial.editor.EditorOperation;
 import org.vial.editor.EditorOperationType;
 import org.vial.editor.internal.StringEditor;
+import org.vial.utils.VialConsole;
 import org.vial.utils.internal.KeyMaps;
 
 import java.io.IOException;
@@ -78,7 +79,7 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
 
     public void refreshHeader() {
         saveCursorPosition();
-        AnsiConsole.out.print(ansi().cursor(1, 1));
+        VialConsole.out.print(ansi().cursor(1, 1));
         String fileName = getFile() != null ? getFile().getName() : "<no file>";
         Ansi style = ansi();
         if (getTheme().getHeaderBackground() != null) {
@@ -88,11 +89,11 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
             style.fg(getTheme().getHeaderForeground());
         }
 
-        AnsiConsole.out.print(style.a(EDITOR_NAME).a(":").a(fileName).a(isDirty() ? DIRTY_SIGN : "").eraseLine(Ansi.Erase.FORWARD));
+        VialConsole.out.print(style.a(EDITOR_NAME).a(":").a(fileName).a(isDirty() ? DIRTY_SIGN : "").eraseLine(Ansi.Erase.FORWARD));
         String textCoords = "L:" + getLine() + " C:" + getColumn();
-        AnsiConsole.out.print(ansi().cursor(1, getTerminal().getWidth() - textCoords.length()));
-        AnsiConsole.out.print(ansi().a(textCoords).reset().newline());
-        AnsiConsole.out.print(ansi().cursor(getTerminal().getHeight(), 1));
+        VialConsole.out.print(ansi().cursor(1, getTerminal().getWidth() - textCoords.length()));
+        VialConsole.out.print(ansi().a(textCoords).reset());
+        VialConsole.out.print(ansi().cursor(getTerminal().getHeight(), 1));
         restoreCursorPosition();
     }
 
@@ -108,16 +109,16 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
         if (getTheme().getFooterForeground() != null) {
             style.fg(getTheme().getFooterForeground());
         }
-        AnsiConsole.out.print(style);
-        AnsiConsole.out.print(ansi().cursor(getTerminal().getHeight() + 1 - getFooterSize(), 1).eraseLine(Ansi.Erase.FORWARD));
+        VialConsole.out.print(style);
+        VialConsole.out.print(ansi().cursor(getTerminal().getHeight() + 1 - getFooterSize(), 1).eraseLine(Ansi.Erase.FORWARD));
         for (int i = 1; i <= helpLines.size(); i++) {
             String helpLine = helpLines.get(i - 1);
             int startColumn = (getTerminal().getWidth() - helpLine.length()) / 2;
-            AnsiConsole.out.print(ansi().cursor(getTerminal().getHeight() + 1 - getFooterSize() + i, 1).eraseLine(Ansi.Erase.FORWARD));
-            AnsiConsole.out.print(ansi().cursor(getTerminal().getHeight() + 1 - getFooterSize() + i, startColumn));
-            AnsiConsole.out.print(helpLine);
+            VialConsole.out.print(ansi().cursor(getTerminal().getHeight() + 1 - getFooterSize() + i, 1).eraseLine(Ansi.Erase.FORWARD));
+            VialConsole.out.print(ansi().cursor(getTerminal().getHeight() + 1 - getFooterSize() + i, startColumn));
+            VialConsole.out.print(helpLine);
         }
-        AnsiConsole.out.print(ansi().reset());
+        VialConsole.out.print(ansi().reset());
         restoreCursorPosition();
     }
 

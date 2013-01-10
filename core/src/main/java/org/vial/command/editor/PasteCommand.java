@@ -34,7 +34,6 @@ public class PasteCommand extends AbstractUndoableCommand {
         if (!clipboardContent.isEmpty()) {
             editor.setDirty(true);
             editor.put(clipboardContent);
-            editor.flush();
         }
         super.execute();
     }
@@ -45,7 +44,6 @@ public class PasteCommand extends AbstractUndoableCommand {
         for (int i = 0; i < clipboardContent.length(); i++) {
             editor.backspace();
         }
-        editor.flush();
     }
 
     public final String getClipboardContent() {

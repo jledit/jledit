@@ -36,6 +36,5 @@ public class MoveCursorRightCommand implements Command {
         editor.moveRight(number);
         editor.refreshHeader();
         editor.refreshFooter();
-        editor.flush();
     }
 }

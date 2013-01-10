@@ -46,8 +46,6 @@ public interface ConsoleEditor extends Editor<String>, InputReader, LifeCycle {
 
     void restoreCursorPosition();
 
-    void flush();
-
     int getHeaderSize();
 
     int getFooterSize();

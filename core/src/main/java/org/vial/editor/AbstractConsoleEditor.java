@@ -947,7 +947,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
      */
     protected void displayText(String text) {
         if (highLight != null && !highLight.isEmpty() && text.contains(highLight)) {
-            String highLightedText = text.replaceAll(highLight, ansi().bold().bg(theme.getHighLightBackground()).fg(theme.getHeaderForeground()).a(highLight).boldOff().reset().toString());
+            String highLightedText = text.replaceAll(highLight, ansi().bold().bg(theme.getHighLightBackground()).fg(theme.getHighLightForeground()).a(highLight).boldOff().reset().toString());
             VialConsole.out.print(highLightedText);
         } else {
             VialConsole.out.print(text);

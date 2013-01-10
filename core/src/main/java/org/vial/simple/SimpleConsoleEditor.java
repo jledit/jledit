@@ -77,7 +77,7 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
     }
 
     public void refreshHeader() {
-        AnsiConsole.out.print(ansi().saveCursorPosition());
+        saveCursorPosition();
         AnsiConsole.out.print(ansi().cursor(1, 1));
         String fileName = getFile() != null ? getFile().getName() : "<no file>";
         Ansi style = ansi();
@@ -93,15 +93,14 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
         AnsiConsole.out.print(ansi().cursor(1, getTerminal().getWidth() - textCoords.length()));
         AnsiConsole.out.print(ansi().a(textCoords).reset().newline());
         AnsiConsole.out.print(ansi().cursor(getTerminal().getHeight(), 1));
-        AnsiConsole.out.print(ansi().restorCursorPosition());
-        AnsiConsole.out.flush();
+        restoreCursorPosition();
     }
 
     /**
      * Refreshes the footer that displays the current line and column.
      */
     public void refreshFooter() {
-        AnsiConsole.out.print(ansi().saveCursorPosition());
+        saveCursorPosition();
         Ansi style = ansi();
         if (getTheme().getFooterBackground() != null) {
             style.bg(getTheme().getFooterBackground());
@@ -119,8 +118,7 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
             AnsiConsole.out.print(helpLine);
         }
         AnsiConsole.out.print(ansi().reset());
-        AnsiConsole.out.print(ansi().restorCursorPosition());
-        AnsiConsole.out.flush();
+        restoreCursorPosition();
     }
 
     private void addHelpLines(List<String> helpLines) {

@@ -15,18 +15,20 @@
 package org.vial.command.editor;
 
 import org.vial.command.Command;
+import org.vial.editor.ConsoleEditor;
 import org.vial.editor.Editor;
 
 public class MoveCursorToEndCommand implements Command {
 
-    private final Editor editor;
+    private final ConsoleEditor editor;
 
-    public MoveCursorToEndCommand(Editor editor) {
+    public MoveCursorToEndCommand(ConsoleEditor editor) {
         this.editor = editor;
     }
 
     @Override
     public void execute() {
         editor.end();
+        editor.flush();
     }
 }

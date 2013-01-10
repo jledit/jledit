@@ -25,6 +25,7 @@ import jline.internal.InputStreamReader;
 import jline.internal.NonBlockingInputStream;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
+import org.vial.collection.RollingStack;
 import org.vial.command.Command;
 import org.vial.command.CommandFactory;
 import org.vial.command.undo.UndoContext;
@@ -59,6 +60,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     public static final int READ_EXPIRED = -2;
 
     private final UndoContext undoContext = new UndoContext();
+    private final RollingStack<Coordinates> cursorPositions = new RollingStack<Coordinates>();
 
     //The line inside the scrolling frame.
     //Minimum value = 1 and maximum value = terminal height - getHeaderSize() - getFooterSize().
@@ -202,7 +204,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
      */
     @Override
     public boolean readBoolean(String message, Boolean defaultValue) throws IOException {
-        AnsiConsole.out.print(ansi().saveCursorPosition());
+        saveCursorPosition();
         Ansi style = ansi();
         if (getTheme().getPromptBackground() != null) {
             style.bg(getTheme().getPromptBackground());
@@ -216,7 +218,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         }
         AnsiConsole.out.print(ansi().cursor(terminal.getHeight(), 1));
         AnsiConsole.out.print(style.a(message).bold().eraseLine(Ansi.Erase.FORWARD));
-        AnsiConsole.out.print(ansi().restorCursorPosition());
+        restoreCursorPosition();
         AnsiConsole.out.flush();
         try {
             EditorOperation operation;
@@ -273,7 +275,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
     public String readLine(String message) throws IOException {
         String result = null;
-        AnsiConsole.out.print(ansi().saveCursorPosition());
+        saveCursorPosition();
         Ansi style = ansi();
         if (getTheme().getPromptBackground() != null) {
             style.bg(getTheme().getPromptBackground());
@@ -293,7 +295,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             result = readLine();
         } finally {
             AnsiConsole.out.print(ansi().reset());
-            AnsiConsole.out.print(ansi().restorCursorPosition());
+            restoreCursorPosition();
             refreshFooter();
         }
         return result;
@@ -391,7 +393,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             repaintLine++;
         }
         AnsiConsole.out.print(ansi().cursor(2, 1));
-        AnsiConsole.out.flush();
     }
 
     /**
@@ -409,14 +410,13 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             toRepaintLines.removeFirst();
         }
 
-        AnsiConsole.out.print(ansi().saveCursorPosition());
+        saveCursorPosition();
         for (int l = 0; l < Math.min(maxLinesToRepaint, toRepaintLines.size()); l++) {
             AnsiConsole.out.print(ansi().cursor(frameLine + getHeaderSize() + l, 1));
             AnsiConsole.out.print(ansi().eraseLine(Erase.FORWARD));
             displayText(toRepaintLines.get(l));
         }
-        AnsiConsole.out.print(ansi().restorCursorPosition());
-        AnsiConsole.out.flush();
+        restoreCursorPosition();
     }
 
     /**
@@ -442,7 +442,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             }
         }
 
-        AnsiConsole.out.print(ansi().saveCursorPosition());
+        saveCursorPosition();
         for (int l = 0; l < linesToRepaint; l++) {
             AnsiConsole.out.print(ansi().cursor(frameLine + getHeaderSize() + l, 1));
             AnsiConsole.out.print(ansi().eraseLine(Erase.FORWARD));
@@ -452,8 +452,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 displayText("");
             }
         }
-        AnsiConsole.out.print(ansi().restorCursorPosition());
-        AnsiConsole.out.flush();
+        restoreCursorPosition();
     }
 
     public void refreshText() {
@@ -539,7 +538,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 AnsiConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
             }
         }
-        AnsiConsole.out.flush();
     }
 
     public void moveDown(int offset) {
@@ -574,7 +572,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 AnsiConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
             }
         }
-        AnsiConsole.out.flush();
     }
 
     /**
@@ -627,7 +624,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             }
         }
         AnsiConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
-        AnsiConsole.out.flush();
     }
 
     public void moveRight(int offset) {
@@ -663,7 +659,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             }
         }
         AnsiConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
-        AnsiConsole.out.flush();
     }
 
     /**
@@ -690,7 +685,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             }
         }
         AnsiConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
-        AnsiConsole.out.flush();
         refreshHeader();
         refreshFooter();
     }
@@ -718,7 +712,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             }
         }
         AnsiConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
-        AnsiConsole.out.flush();
         refreshHeader();
         refreshFooter();
     }
@@ -771,7 +764,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             }
 
             AnsiConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
-            AnsiConsole.out.flush();
             refreshHeader();
             refreshFooter();
         }
@@ -842,7 +834,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             }
             AnsiConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
         }
-        AnsiConsole.out.flush();
         refreshHeader();
         refreshFooter();
         return b;
@@ -861,7 +852,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         }
         redrawRestOfScreen();
         AnsiConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
-        AnsiConsole.out.flush();
         refreshHeader();
         refreshFooter();
     }
@@ -877,7 +867,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         delegate.mergeLine();
         redrawRestOfScreen();
         AnsiConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
-        AnsiConsole.out.flush();
         refreshHeader();
         refreshFooter();
     }
@@ -937,7 +926,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             refreshText();
         } else {
             AnsiConsole.out.print(ansi().scrollUp(rows));
-            AnsiConsole.out.flush();
         }
     }
 
@@ -947,7 +935,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             refreshText();
         } else {
             AnsiConsole.out.print(ansi().scrollDown(rows));
-            AnsiConsole.out.flush();
         }
     }
 
@@ -963,7 +950,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         } else {
             AnsiConsole.out.print(text);
         }
-        AnsiConsole.out.flush();
     }
 
     /**
@@ -976,6 +962,24 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             sb.append(" ");
         }
         AnsiConsole.out.print(sb.toString());
+    }
+
+    @Override
+    public void saveCursorPosition() {
+        cursorPositions.push(new Coordinates(frameLine, frameColumn));
+    }
+
+    @Override
+    public void restoreCursorPosition() {
+        Coordinates coordinates = cursorPositions.pop();
+        if (coordinates != null) {
+            AnsiConsole.out.print(ansi().cursor(coordinates.getLine() + getHeaderSize(), coordinates.getColumn()));
+        }
+    }
+
+    @Override
+    public void flush() {
+        AnsiConsole.out.flush();
     }
 
     protected void highLight(String text) {

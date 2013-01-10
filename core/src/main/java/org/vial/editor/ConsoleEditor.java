@@ -36,12 +36,17 @@ public interface ConsoleEditor extends Editor<String>, InputReader, LifeCycle {
 
     void moveRight(int offset);
 
-
     void refreshText();
 
     void refreshHeader();
 
     void refreshFooter();
+
+    void saveCursorPosition();
+
+    void restoreCursorPosition();
+
+    void flush();
 
     int getHeaderSize();
 

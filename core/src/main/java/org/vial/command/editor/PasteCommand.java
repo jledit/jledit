@@ -14,9 +14,9 @@
 
 package org.vial.command.editor;
 
-import org.vial.editor.Editor;
+import org.vial.editor.ConsoleEditor;
 
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 
@@ -24,7 +24,7 @@ public class PasteCommand extends AbstractUndoableCommand {
 
     private final String clipboardContent;
 
-    public PasteCommand(Editor editor) {
+    public PasteCommand(ConsoleEditor editor) {
         super(editor);
         this.clipboardContent = getClipboardContent();
     }
@@ -32,8 +32,9 @@ public class PasteCommand extends AbstractUndoableCommand {
     @Override
     public void execute() {
         if (!clipboardContent.isEmpty()) {
-            editor.put(clipboardContent);
             editor.setDirty(true);
+            editor.put(clipboardContent);
+            editor.flush();
         }
         super.execute();
     }
@@ -44,6 +45,7 @@ public class PasteCommand extends AbstractUndoableCommand {
         for (int i = 0; i < clipboardContent.length(); i++) {
             editor.backspace();
         }
+        editor.flush();
     }
 
     public final String getClipboardContent() {

@@ -15,11 +15,11 @@
 package org.vial.command.editor;
 
 
-import org.vial.editor.Editor;
+import org.vial.editor.ConsoleEditor;
 
 public class NewLineCommand extends AbstractUndoableCommand {
 
-    public NewLineCommand(Editor editor) {
+    public NewLineCommand(ConsoleEditor editor) {
         super(editor);
     }
 
@@ -28,11 +28,13 @@ public class NewLineCommand extends AbstractUndoableCommand {
         editor.setDirty(true);
         super.execute();
         editor.newLine();
+        editor.flush();
     }
 
     @Override
     public void undo() {
         super.undo();
         editor.mergeLine();
+        editor.flush();
     }
 }

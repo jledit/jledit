@@ -15,18 +15,18 @@
 package org.vial.command.editor;
 
 import org.vial.command.undo.UndoableCommand;
-import org.vial.editor.Editor;
+import org.vial.editor.ConsoleEditor;
 
 /**
  *
  */
 public abstract class AbstractUndoableCommand implements UndoableCommand {
 
-    final Editor editor;
+    final ConsoleEditor editor;
     int line;
     int column;
 
-    public AbstractUndoableCommand(Editor editor) {
+    public AbstractUndoableCommand(ConsoleEditor editor) {
         this.editor = editor;
     }
 

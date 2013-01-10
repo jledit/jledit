@@ -36,5 +36,6 @@ public class MoveCursorUpCommand implements Command {
         editor.moveUp(number);
         editor.refreshHeader();
         editor.refreshFooter();
+        editor.flush();
     }
 }

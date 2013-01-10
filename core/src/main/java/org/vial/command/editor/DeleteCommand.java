@@ -14,13 +14,13 @@
 
 package org.vial.command.editor;
 
-import org.vial.editor.Editor;
+import org.vial.editor.ConsoleEditor;
 
 public class DeleteCommand extends AbstractUndoableCommand {
 
     private String deleted;
 
-    public DeleteCommand(Editor editor) {
+    public DeleteCommand(ConsoleEditor editor) {
         super(editor);
     }
 
@@ -37,6 +37,7 @@ public class DeleteCommand extends AbstractUndoableCommand {
     public void undo() {
         super.undo();
         editor.put(deleted);
+        editor.flush();
     }
 
 }

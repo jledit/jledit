@@ -15,13 +15,13 @@
 package org.vial.command.editor;
 
 
-import org.vial.editor.Editor;
+import org.vial.editor.ConsoleEditor;
 
 public class TypeCommand extends AbstractUndoableCommand {
 
     private final String str;
 
-    public TypeCommand(Editor editor, String str) {
+    public TypeCommand(ConsoleEditor editor, String str) {
         super(editor);
         this.str = str;
     }
@@ -30,6 +30,7 @@ public class TypeCommand extends AbstractUndoableCommand {
     public void execute() {
         editor.put(str);
         editor.setDirty(true);
+        editor.flush();
         super.execute();
 
     }
@@ -40,5 +41,6 @@ public class TypeCommand extends AbstractUndoableCommand {
         for (int i = 0; i < str.length(); i++) {
             editor.backspace();
         }
+        editor.flush();
     }
 }

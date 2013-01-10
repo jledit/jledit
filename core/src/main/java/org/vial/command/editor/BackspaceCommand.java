@@ -14,14 +14,14 @@
 
 package org.vial.command.editor;
 
-import org.vial.editor.Editor;
+import org.vial.editor.ConsoleEditor;
 
 public class BackspaceCommand extends AbstractUndoableCommand {
 
 
     private String deleted;
 
-    public BackspaceCommand(Editor editor) {
+    public BackspaceCommand(ConsoleEditor editor) {
         super(editor);
     }
 
@@ -38,6 +38,7 @@ public class BackspaceCommand extends AbstractUndoableCommand {
     public void undo() {
         super.undo();
         editor.put(deleted);
+        editor.flush();
     }
 
 }

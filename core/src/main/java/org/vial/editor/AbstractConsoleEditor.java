@@ -24,7 +24,6 @@ import jline.internal.Configuration;
 import jline.internal.InputStreamReader;
 import jline.internal.NonBlockingInputStream;
 import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
 import org.vial.collection.RollingStack;
 import org.vial.command.Command;
 import org.vial.command.CommandFactory;
@@ -32,7 +31,7 @@ import org.vial.command.undo.UndoContext;
 import org.vial.command.undo.UndoContextAware;
 import org.vial.command.undo.UndoableCommand;
 import org.vial.editor.internal.StringEditor;
-import org.vial.terminal.TerminalWrapper;
+import org.vial.terminal.VialTerminalFactory;
 import org.vial.theme.DefaultTheme;
 import org.vial.theme.Theme;
 import org.vial.utils.Closeables;
@@ -89,7 +88,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
     public AbstractConsoleEditor(final Terminal term) throws Exception {
         this.encoding = encoding != null ? encoding : Configuration.getEncoding();
-        this.terminal = term != null ? TerminalWrapper.wrap(term) : TerminalFactory.get();
+        this.terminal = VialTerminalFactory.get(term);
     }
 
     public final void init() throws Exception {

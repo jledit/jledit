@@ -28,26 +28,24 @@
 
 package org.vial.terminal;
 
-import jline.Terminal;
-import jline.UnixTerminal;
 import jline.WindowsTerminal;
 
-/**
- * This is a special {@link UnixTerminal} that allows access to special characters
- * used by the editor, such as CTRL-C, CTRL-Z & CTRL-S.
- */
-public class TerminalWrapper {
+public class VialWindowsTerminal extends WindowsTerminal {
 
+    private final WindowsTerminal delegate;
+    private final boolean preExists;
 
-    public static Terminal wrap(Terminal terminal) throws Exception {
-        if (terminal == null) {
-            return null;
-        } else if (UnixTerminal.class.isAssignableFrom(terminal.getClass())) {
-            return new WrappedUnixTerminal((UnixTerminal) terminal);
-        } else if (WindowsTerminal.class.isAssignableFrom(terminal.getClass())) {
-            return new WrappedWindowsTerminal((WindowsTerminal) terminal);
+    public VialWindowsTerminal(WindowsTerminal delegate, boolean preExists) throws Exception {
+        this.delegate = delegate;
+        this.preExists = preExists;
+    }
+
+    @Override
+    public void restore() throws Exception {
+        if (preExists) {
+            delegate.reset();
         } else {
-            return terminal;
+            delegate.restore();
         }
     }
 }

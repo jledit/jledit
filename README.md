@@ -1,4 +1,4 @@
-**Vial**
+**JLEdit**
 ---------
 An extensible [Jansi](http://jansi.fusesource.org/) & [Jline](https://github.com/jline/jline2 "Jline") based Console Text Editor.
 
@@ -23,17 +23,17 @@ Buidling requires:
 
 Once the build is done:
 
-    >cd vial/target
-    >tar -zxvf vial-1.0-SNAPSHOT-bin.tar.gz
-    > cd vial-1.0-SNAPSHOT
-    > ./bin/vial /path/to/myfile
+    >cd jledit/target
+    >tar -zxvf jledit-1.0-SNAPSHOT-bin.tar.gz
+    > cd jledit-1.0-SNAPSHOT
+    > ./bin/jledit /path/to/myfile
 
 or on Windows:
 
-    >cd vial/target
-    > unzip vial-1.0-SNAPSHOT-bin.zip
-    > cd vial-1.0-SNAPSHOT/bin
-    > vial.bat /path/to/myfile
+    >cd jledit/target
+    > unzip jledit-1.0-SNAPSHOT-bin.zip
+    > cd jledit-1.0-SNAPSHOT/bin
+    > jledit.bat /path/to/myfile
 
 
 

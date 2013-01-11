@@ -17,18 +17,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.vial</groupId>
-        <artifactId>vial-project</artifactId>
+        <groupId>org.jledit</groupId>
+        <artifactId>jledit-project</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>core</artifactId>
     <packaging>bundle</packaging>
-    <name>Vial :: Core</name>
+    <name>JLEdit :: Core</name>
 
     <properties>
-        <osgi.activator>org.vial.osgi.Activator</osgi.activator>
+        <osgi.activator>org.jledit.osgi.Activator</osgi.activator>
         <osgi.import>
             jline*,
             org.fusesource.jansi*,
@@ -36,20 +36,20 @@
         </osgi.import>
         <osgi.private>
             org.mozilla.universalchardet*,
-            org.vial.utils,
-            org.vial.utils.internal,
-            org.vial.collection,
-            org.vial.simple,
-            org.vial.editor.internal,
-            org.vial.main,
-            org.vial.osgi
+            org.jledit.utils,
+            org.jledit.utils.internal,
+            org.jledit.collection,
+            org.jledit.simple,
+            org.jledit.editor.internal,
+            org.jledit.main,
+            orjledital.osgi
         </osgi.private>
         <osgi.export>
-            org.vial;-noimport:=true,
-            org.vial.editor;-noimport:=true,
-            org.vial.theme*;-noimport:=true,
-            org.vial.command*;-noimport:=true,
-            org.vial.terminal;-noimport:=true
+            org.jledit;-noimport:=true,
+            org.jledit.editor;-noimport:=true,
+            org.jledit.theme*;-noimport:=true,
+            org.jledit.command*;-noimport:=true,
+            org.jledit.terminal;-noimport:=true
         </osgi.export>
     </properties>
 

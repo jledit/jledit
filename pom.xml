@@ -24,14 +24,14 @@
         <version>7</version>
     </parent>
 
-    <groupId>org.vial</groupId>
-    <artifactId>vial-project</artifactId>
+    <groupId>org.jledit</groupId>
+    <artifactId>jledit-project</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>Vial :: Project</name>
+    <name>JLEdit :: Project</name>
 
     <description>A JLine and Jansi based console text editor.</description>
-    <url>https://github.com/iocanel/vial</url>
+    <url>https://github.com/jledit/jledit</url>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -40,9 +40,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:git://github.com/iocanel/vial.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/iocanel/vial.git</developerConnection>
-        <url>http://github.com/iocanel/vial</url>
+        <connection>scm:git:git://github.com/jledit/jledit.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/jledit/jledit.git</developerConnection>
+        <url>http://github.com/jledit/jledit</url>
     </scm>
 
     <developers>
@@ -56,7 +56,7 @@
 
     <modules>
         <module>core</module>
-        <module>vial</module>
+        <module>jledit</module>
     </modules>
 
     <properties>

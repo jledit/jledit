@@ -57,6 +57,7 @@
     <modules>
         <module>core</module>
         <module>jledit</module>
+        <module>karaf</module>
     </modules>
 
     <properties>
@@ -73,6 +74,7 @@
         <jansi.version>1.9</jansi.version>
         <jline.version>2.7</jline.version>
         <juniversalchardet.version>1.0.3</juniversalchardet.version>
+        <karaf.version>2.2.9</karaf.version>
         <osgi.version>4.2.0</osgi.version>
         <!-- Testing Dependencies -->
         <junit.version>4.10</junit.version>
@@ -144,6 +146,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Internal Dependencies -->
+            <dependency>
+                <groupId>org.jledit</groupId>
+                <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>jline</groupId>
                 <artifactId>jline</artifactId>
@@ -158,6 +166,12 @@
                 <groupId>com.googlecode.juniversalchardet</groupId>
                 <artifactId>juniversalchardet</artifactId>
                 <version>${juniversalchardet.version}</version>
+            </dependency>
+            <!-- Karaf Dependencies -->
+            <dependency>
+                <groupId>org.apache.karaf.shell</groupId>
+                <artifactId>org.apache.karaf.shell.console</artifactId>
+                <version>${karaf.version}</version>
             </dependency>
             <!-- OSGi Dependencies -->
             <dependency>

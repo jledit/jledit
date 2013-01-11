@@ -24,15 +24,15 @@ Buidling requires:
 Once the build is done:
 
     >cd jledit/target
-    >tar -zxvf jledit-1.0-SNAPSHOT-bin.tar.gz
-    > cd jledit-1.0-SNAPSHOT
+    >tar -zxvf jledit-0.1-SNAPSHOT-bin.tar.gz
+    > cd jledit-0.1-SNAPSHOT
     > ./bin/jledit /path/to/myfile
 
 or on Windows:
 
     >cd jledit/target
-    > unzip jledit-1.0-SNAPSHOT-bin.zip
-    > cd jledit-1.0-SNAPSHOT/bin
+    > unzip jledit-0.1-SNAPSHOT-bin.zip
+    > cd jledit-0.1-SNAPSHOT/bin
     > jledit.bat /path/to/myfile
 
 
@@ -44,7 +44,6 @@ or on Windows:
 * Addiitional work on key mappings per Operating System is required.
 * Save will convert all **\r** characters to **\n**.
 * The base ConsoleEditor implementation needs to be simplified.
-* Need a cleaner way to map **backspace** and **delete** chars on osx.
 * Possible deadlock when shutting closing the editor.
 
 

@@ -34,7 +34,7 @@ public class MoveCursorDownCommand implements Command {
     @Override
     public void execute() {
         editor.moveDown(number);
-        editor.refreshHeader();
-        editor.refreshFooter();
+        editor.redrawHeader();
+        editor.redrawFooter();
     }
 }

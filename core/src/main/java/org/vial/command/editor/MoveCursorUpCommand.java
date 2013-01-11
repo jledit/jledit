@@ -34,7 +34,7 @@ public class MoveCursorUpCommand implements Command {
     @Override
     public void execute() {
         editor.moveUp(number);
-        editor.refreshHeader();
-        editor.refreshFooter();
+        editor.redrawHeader();
+        editor.redrawFooter();
     }
 }

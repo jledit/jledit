@@ -17,7 +17,6 @@ package org.vial.simple;
 import jline.Terminal;
 import jline.console.KeyMap;
 import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
 import org.vial.command.Command;
 import org.vial.command.CommandNotFoundException;
 import org.vial.command.editor.BackspaceCommand;
@@ -41,14 +40,11 @@ import org.vial.command.file.FileSaveCommand;
 import org.vial.command.undo.RedoCommand;
 import org.vial.command.undo.UndoCommand;
 import org.vial.editor.AbstractConsoleEditor;
-import org.vial.editor.Editor;
 import org.vial.editor.EditorOperation;
 import org.vial.editor.EditorOperationType;
-import org.vial.editor.internal.StringEditor;
 import org.vial.utils.VialConsole;
 import org.vial.utils.internal.KeyMaps;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,7 +73,7 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
         setFooterSize(helpLines.size() + 1);
     }
 
-    public void refreshHeader() {
+    public void redrawHeader() {
         saveCursorPosition();
         VialConsole.out.print(ansi().cursor(1, 1));
         String fileName = getFile() != null ? getFile().getName() : "<no file>";
@@ -100,7 +96,7 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
     /**
      * Refreshes the footer that displays the current line and column.
      */
-    public void refreshFooter() {
+    public void redrawFooter() {
         saveCursorPosition();
         Ansi style = ansi();
         if (getTheme().getFooterBackground() != null) {
@@ -119,6 +115,29 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
             VialConsole.out.print(helpLine);
         }
         VialConsole.out.print(ansi().reset());
+        restoreCursorPosition();
+    }
+
+    /**
+     * Redraws the cursor coordinates if the flavor supports that.
+     */
+    @Override
+    public void redrawCoords() {
+        saveCursorPosition();
+        VialConsole.out.print(ansi().cursor(1, 1));
+        Ansi style = ansi();
+        if (getTheme().getHeaderBackground() != null) {
+            style.bg(getTheme().getHeaderBackground());
+        }
+        if (getTheme().getHeaderForeground() != null) {
+            style.fg(getTheme().getHeaderForeground());
+        }
+
+        String textCoords = "L:" + getLine() + " C:" + getColumn();
+        VialConsole.out.print(style);
+        VialConsole.out.print(ansi().cursor(1, getTerminal().getWidth() - textCoords.length()));
+        VialConsole.out.print(ansi().a(textCoords).reset());
+        VialConsole.out.print(ansi().cursor(getTerminal().getHeight(), 1).reset());
         restoreCursorPosition();
     }
 
@@ -236,5 +255,11 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
         simpleKeyMap.bind(Character.toString((char) 127), EditorOperationType.BACKSAPCE);
         KeyMaps.bindArrowKeys(simpleKeyMap);
         return simpleKeyMap;
+    }
+
+    @Override
+    public void setDirty(Boolean dirty) {
+        super.setDirty(dirty);
+        redrawHeader();
     }
 }

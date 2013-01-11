@@ -16,7 +16,6 @@ package org.vial.editor;
 
 
 import jline.Terminal;
-import jline.TerminalFactory;
 import jline.WindowsTerminal;
 import jline.console.KeyMap;
 import jline.console.Operation;
@@ -237,7 +236,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 }
             }
         } finally {
-            refreshFooter();
+            redrawFooter();
         }
     }
 
@@ -297,7 +296,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         } finally {
             VialConsole.out.print(ansi().reset());
             restoreCursorPosition();
-            refreshFooter();
+            redrawFooter();
         }
         return result;
     }
@@ -365,6 +364,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 undoContext.undoPush((UndoableCommand) command);
             }
             command.execute();
+            redrawCoords();
             flush();
         } catch (Exception ex) {
             //noop.
@@ -380,8 +380,8 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         VialConsole.out.print(ansi().eraseScreen(Erase.ALL));
         VialConsole.out.print(ansi().cursor(1, 1));
         VialConsole.out.print("\33[" + (getHeaderSize() + 1) + ";" + (terminal.getHeight() - getFooterSize()) + ";r");
-        refreshHeader();
-        refreshFooter();
+        redrawHeader();
+        redrawFooter();
         LinkedList<String> linesToDisplay = new LinkedList<String>();
         int l = 1;
         while (linesToDisplay.size() < terminal.getHeight() - getFooterSize()) {
@@ -457,7 +457,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         restoreCursorPosition();
     }
 
-    public void refreshText() {
+    public void redrawText() {
         int startLine = getLine();
         int startColum = getColumn();
         //Go to the start of the screen (1,1)
@@ -491,8 +491,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         moveVertical(verticalOffset);
         int horizontalOffset = column - getColumn();
         moveHorizontally(horizontalOffset);
-        refreshHeader();
-        refreshFooter();
     }
 
     /**
@@ -687,8 +685,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             }
         }
         VialConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
-        refreshHeader();
-        refreshFooter();
     }
 
     /**
@@ -714,8 +710,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             }
         }
         VialConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
-        refreshHeader();
-        refreshFooter();
     }
 
 
@@ -766,8 +760,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             }
 
             VialConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
-            refreshHeader();
-            refreshFooter();
         }
     }
 
@@ -780,8 +772,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         } else {
             redrawRestOfLine();
         }
-        refreshHeader();
-        refreshFooter();
         return r;
     }
 
@@ -836,8 +826,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             }
             VialConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
         }
-        refreshHeader();
-        refreshFooter();
         return b;
     }
 
@@ -854,8 +842,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         }
         redrawRestOfScreen();
         VialConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
-        refreshHeader();
-        refreshFooter();
     }
 
     @Override
@@ -869,8 +855,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         delegate.mergeLine();
         redrawRestOfScreen();
         VialConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
-        refreshHeader();
-        refreshFooter();
     }
 
     /**
@@ -892,9 +876,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         moveVertical(verticalOffset);
         int horizontalOffset = targetColumn - getColumn();
         moveHorizontally(horizontalOffset);
-        refreshText();
-        refreshHeader();
-        refreshFooter();
+        redrawText();
 
     }
 
@@ -917,15 +899,13 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         moveVertical(verticalOffset);
         int horizontalOffset = targetColumn - getColumn();
         moveHorizontally(horizontalOffset);
-        refreshText();
-        refreshHeader();
-        refreshFooter();
+        redrawText();
     }
 
     protected void scrollUp(int rows) {
         //Windows Terminals don't support scrolling.
         if (WindowsTerminal.class.isAssignableFrom(terminal.getClass())) {
-            refreshText();
+            redrawText();
         } else {
             VialConsole.out.print(ansi().scrollUp(rows));
         }
@@ -934,7 +914,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     protected void scrollDown(int rows) {
         //Windows Terminals don't support scrolling.
         if (WindowsTerminal.class.isAssignableFrom(terminal.getClass())) {
-            refreshText();
+            redrawText();
         } else {
             VialConsole.out.print(ansi().scrollDown(rows));
         }
@@ -1002,8 +982,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             delegate.save(this.file);
         }
         setDirty(false);
-        refreshHeader();
-        refreshFooter();
     }
 
 
@@ -1079,7 +1057,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     @Override
     public void setDirty(Boolean dirty) {
         delegate.setDirty(dirty);
-        refreshHeader();
     }
 
     public int getHeaderSize() {

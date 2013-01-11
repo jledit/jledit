@@ -18,11 +18,41 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
     <groupId>org.vial</groupId>
     <artifactId>vial-project</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>Vial :: Project</name>
+
+    <description>A JLine and Jansi based console text editor.</description>
+    <url>https://github.com/iocanel/vial</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:git://github.com/iocanel/vial.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/iocanel/vial.git</developerConnection>
+        <url>http://github.com/iocanel/vial</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>iocanel</id>
+            <name>Ioannis Canellos</name>
+            <email>iocanel@gmail.com</email>
+            <url>http://iocanel.blogspot.com</url>
+        </developer>
+    </developers>
 
     <modules>
         <module>core</module>
@@ -151,5 +181,40 @@
         </dependencies>
     </dependencyManagement>
 
+    <profiles>
+        <!-- modifies the plugin config inherited from oss-parent -->
+        <profile>
+            <id>sonatype-release-profile-extension</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <configuration>
+                            <executable>${gpg.command}</executable>
+                            <passphrase>${gpg.passphrase}</passphrase>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <distributionManagement>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

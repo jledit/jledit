@@ -27,9 +27,9 @@ public class BackspaceCommand extends AbstractUndoableCommand {
 
     @Override
     public void execute() {
-        deleted = editor.backspace();
+        deleted = getEditor().backspace();
         if (deleted != null && !deleted.isEmpty()) {
-            editor.setDirty(true);
+            getEditor().setDirty(true);
         }
         super.execute();
     }
@@ -37,7 +37,7 @@ public class BackspaceCommand extends AbstractUndoableCommand {
     @Override
     public void undo() {
         super.undo();
-        editor.put(deleted);
+        getEditor().put(deleted);
     }
 
 }

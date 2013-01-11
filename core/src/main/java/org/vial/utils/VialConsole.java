@@ -23,7 +23,11 @@ import static org.fusesource.jansi.AnsiConsole.wrapOutputStream;
 /**
  * A wrapper of {@link org.fusesource.jansi.AnsiConsole} which uses non-autoflushing Streams.
  */
-public class VialConsole {
+public final class VialConsole {
+
+    private VialConsole() {
+        //Utility Class
+    }
 
     public static final PrintStream system_out = System.out;
     public static final PrintStream out = new PrintStream(new BufferedOutputStream(wrapOutputStream(system_out), 1024), false);

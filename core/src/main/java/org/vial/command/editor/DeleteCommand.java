@@ -26,9 +26,9 @@ public class DeleteCommand extends AbstractUndoableCommand {
 
     @Override
     public void execute() {
-        deleted = editor.delete();
+        deleted = getEditor().delete();
         if (deleted != null && !deleted.isEmpty()) {
-            editor.setDirty(true);
+            getEditor().setDirty(true);
         }
         super.execute();
     }
@@ -36,7 +36,7 @@ public class DeleteCommand extends AbstractUndoableCommand {
     @Override
     public void undo() {
         super.undo();
-        editor.put(deleted);
+        getEditor().put(deleted);
     }
 
 }

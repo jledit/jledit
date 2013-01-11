@@ -28,8 +28,8 @@ public class TypeCommand extends AbstractUndoableCommand {
 
     @Override
     public void execute() {
-        editor.put(str);
-        editor.setDirty(true);
+        getEditor().put(str);
+        getEditor().setDirty(true);
         super.execute();
 
     }
@@ -38,7 +38,7 @@ public class TypeCommand extends AbstractUndoableCommand {
     public void undo() {
         super.undo();
         for (int i = 0; i < str.length(); i++) {
-            editor.backspace();
+            getEditor().backspace();
         }
     }
 }

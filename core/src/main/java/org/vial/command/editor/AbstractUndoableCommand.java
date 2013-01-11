@@ -22,9 +22,9 @@ import org.vial.editor.ConsoleEditor;
  */
 public abstract class AbstractUndoableCommand implements UndoableCommand {
 
-    final ConsoleEditor editor;
-    int line;
-    int column;
+    private final ConsoleEditor editor;
+    private int line;
+    private int column;
 
     public AbstractUndoableCommand(ConsoleEditor editor) {
         this.editor = editor;
@@ -45,5 +45,25 @@ public abstract class AbstractUndoableCommand implements UndoableCommand {
     public void execute() {
         line = editor.getLine();
         column = editor.getColumn();
+    }
+
+    public ConsoleEditor getEditor() {
+        return editor;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
     }
 }

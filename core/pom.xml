@@ -42,7 +42,7 @@
             org.jledit.simple,
             org.jledit.editor.internal,
             org.jledit.main,
-            orjledital.osgi
+            org.jledi.osgi
         </osgi.private>
         <osgi.export>
             org.jledit;-noimport:=true,

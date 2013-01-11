@@ -43,7 +43,7 @@ public class Activator implements BundleActivator {
      */
     @Override
     public void start(BundleContext context) throws Exception {
-        jleditFactoryRegistration = context.registerService(EditorFactory.class, editorFactory, null);
+        jleditFactoryRegistration = context.registerService(EditorFactory.class.getName(), editorFactory, null);
     }
 
     /**

@@ -40,13 +40,12 @@
             org.jledit.utils.internal,
             org.jledit.collection,
             org.jledit.simple,
-            org.jledit.editor.internal,
+            org.jledit.internal,
             org.jledit.main,
             org.jledit.osgi
         </osgi.private>
         <osgi.export>
             org.jledit;-noimport:=true,
-            org.jledit.editor;-noimport:=true,
             org.jledit.theme*;-noimport:=true,
             org.jledit.command*;-noimport:=true,
             org.jledit.terminal;-noimport:=true

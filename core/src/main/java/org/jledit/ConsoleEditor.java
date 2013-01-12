@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jledit.editor;
+package org.jledit;
 
 import jline.Terminal;
 import org.jledit.theme.Theme;

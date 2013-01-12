@@ -16,7 +16,7 @@ package org.jledit.command.undo;
 
 
 import org.jledit.command.Command;
-import org.jledit.editor.Editor;
+import org.jledit.Editor;
 
 public class RedoCommand implements UndoContextAware, Command {
 

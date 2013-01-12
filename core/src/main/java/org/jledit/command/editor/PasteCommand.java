@@ -14,7 +14,7 @@
 
 package org.jledit.command.editor;
 
-import org.jledit.editor.ConsoleEditor;
+import org.jledit.ConsoleEditor;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;

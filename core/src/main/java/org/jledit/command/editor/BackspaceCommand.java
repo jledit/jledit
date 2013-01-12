@@ -14,7 +14,7 @@
 
 package org.jledit.command.editor;
 
-import org.jledit.editor.ConsoleEditor;
+import org.jledit.ConsoleEditor;
 
 public class BackspaceCommand extends AbstractUndoableCommand {
 

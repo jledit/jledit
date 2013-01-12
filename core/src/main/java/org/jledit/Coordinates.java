@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jledit.editor;
+package org.jledit;
 
 
 public class Coordinates {

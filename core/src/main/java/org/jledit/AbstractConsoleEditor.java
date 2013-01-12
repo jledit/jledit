@@ -12,11 +12,10 @@
  * limitations under the License.
  */
 
-package org.jledit.editor;
+package org.jledit;
 
 
 import jline.Terminal;
-import jline.TerminalFactory;
 import jline.WindowsTerminal;
 import jline.console.KeyMap;
 import jline.console.Operation;
@@ -30,7 +29,7 @@ import org.jledit.command.CommandFactory;
 import org.jledit.command.undo.UndoContext;
 import org.jledit.command.undo.UndoContextAware;
 import org.jledit.command.undo.UndoableCommand;
-import org.jledit.editor.internal.StringEditor;
+import org.jledit.internal.StringEditor;
 import org.jledit.terminal.JlEditTerminalFactory;
 import org.jledit.theme.DefaultTheme;
 import org.jledit.theme.Theme;
@@ -41,7 +40,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -49,7 +47,7 @@ import static org.fusesource.jansi.Ansi.Erase;
 import static org.fusesource.jansi.Ansi.ansi;
 
 /**
- * An {@link org.jledit.editor.Editor} which delegates to an other {@link org.jledit.editor.Editor} implementation and displays the outcome to the console.
+ * An {@link Editor} which delegates to an other {@link Editor} implementation and displays the outcome to the console.
  */
 public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFactory {
 

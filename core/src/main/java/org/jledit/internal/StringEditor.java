@@ -263,6 +263,8 @@ public class StringEditor implements Editor<String> {
             String[] contentLines = Files.toString(source, charset).split("\n|\r");
             lines.addAll(Arrays.asList(contentLines));
         }
+        this.line = 1;
+        this.column = 1;
     }
 
     @Override

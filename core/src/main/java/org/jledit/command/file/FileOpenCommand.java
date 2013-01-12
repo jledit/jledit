@@ -35,27 +35,29 @@ public class FileOpenCommand implements Command, UndoContextAware {
 
     @Override
     public void execute() {
-        try {
-            if (editor.isDirty()) {
-                boolean doOpen = editor.readBoolean("You have unsaved changes. Do you want to open a new file without saving? [y/N]", false);
-                if (!doOpen) {
-                    return;
+        if (editor.isOpenEnabled()) {
+            try {
+                if (editor.isDirty()) {
+                    boolean doOpen = editor.readBoolean("You have unsaved changes. Do you want to open a new file without saving? [y/N]", false);
+                    if (!doOpen) {
+                        return;
+                    }
                 }
-            }
 
-            if (fileName == null || fileName.isEmpty()) {
-                String f = editor.readLine("Open file:");
-                undoContext.clear();
-                editor.open(new File(f));
-                editor.redrawText();
-                editor.redrawHeader();
-                editor.redrawFooter();
-            } else {
-                undoContext.clear();
-                editor.open(new File(fileName));
+                if (fileName == null || fileName.isEmpty()) {
+                    String f = editor.readLine("Open file:");
+                    undoContext.clear();
+                    editor.open(new File(f));
+                    editor.redrawText();
+                    editor.redrawHeader();
+                    editor.redrawFooter();
+                } else {
+                    undoContext.clear();
+                    editor.open(new File(fileName));
+                }
+            } catch (IOException e) {
+                //noop
             }
-        } catch (IOException e) {
-            //noop
         }
     }
 

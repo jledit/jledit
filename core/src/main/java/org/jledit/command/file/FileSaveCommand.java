@@ -33,17 +33,19 @@ public class FileSaveCommand implements Command, UndoContextAware {
 
     @Override
     public void execute() {
-        try {
-            if (editor.getFile() == null) {
-                String fileName = editor.readLine("Save to file:");
-                editor.save(new File(fileName));
-            } else {
-                editor.save(null);
+        if (editor.isOpenEnabled()) {
+            try {
+                if (editor.getFile() == null) {
+                    String fileName = editor.readLine("Save to file:");
+                    editor.save(new File(fileName));
+                } else {
+                    editor.save(null);
+                }
+                undoContext.clear();
+                editor.setDirty(false);
+            } catch (IOException e) {
+                //noop
             }
-            undoContext.clear();
-            editor.setDirty(false);
-        } catch (IOException e) {
-            //noop
         }
     }
 

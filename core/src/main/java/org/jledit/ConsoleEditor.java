@@ -128,4 +128,30 @@ public interface ConsoleEditor extends Editor<String>, InputReader, LifeCycle {
      * @param title
      */
     void setTitle(String title);
+
+    /**
+     * Checks if the {@link ConsoleEditor} is set to be read only.
+     * @return
+     */
+    boolean isReadOnly();
+
+    /**
+     * Sets/Unsets the {@link ConsoleEditor} to read only mode.
+     * @param readOnly
+     */
+    void setReadOnly(boolean readOnly);
+
+
+    /**
+     * Checks if the {@link ConsoleEditor} can open new file.
+     * @return
+     */
+    boolean isOpenEnabled();
+
+
+    /**
+     * Allows/disallows the {@link ConsoleEditor} to open files.
+     * @param openEnabled
+     */
+    void setOpenEnabled(boolean openEnabled);
 }

@@ -19,7 +19,41 @@ import org.jledit.command.Command;
 public interface UndoableCommand extends Command {
 
     /**
+     * Executes the {@link Command}.
+     */
+    void doExecute();
+
+
+    /**
      * Undo the {@link Command}.
      */
     void undo();
+
+    /**
+     * Executes the {@link Command} again.
+     */
+    void redo();
+    /**
+     * The line the cursor was pointing before the {@link Command} execution.
+     * @return
+     */
+    int getBeforeLine();
+
+    /**
+     * The columns the cursor was pointing before the {@link Command} execution.
+     * @return
+     */
+    int getBeforeColumn();
+
+    /**
+     * The line the cursor was pointing after the {@link Command} execution.
+     * @return
+     */
+    int getAfterLine();
+
+    /**
+     * The columns the cursor was pointing after the {@link Command} execution.
+     * @return
+     */
+    int getAfterColumn();
 }

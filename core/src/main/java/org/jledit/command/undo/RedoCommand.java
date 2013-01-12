@@ -15,18 +15,21 @@
 package org.jledit.command.undo;
 
 
+import org.jledit.ConsoleEditor;
 import org.jledit.command.Command;
-import org.jledit.Editor;
 
 public class RedoCommand implements UndoContextAware, Command {
 
+    private final ConsoleEditor editor;
     private UndoContext context;
 
-    public RedoCommand() {
+    public RedoCommand(ConsoleEditor editor) {
+        this.editor = editor;
         this.context = new UndoContext();
     }
 
-    public RedoCommand(Editor editor, UndoContext context) {
+    public RedoCommand(ConsoleEditor editor, UndoContext context) {
+        this.editor = editor;
         this.context = context;
     }
 
@@ -37,7 +40,9 @@ public class RedoCommand implements UndoContextAware, Command {
     @Override
     public void execute() {
         UndoableCommand undoableCommand = context.redoPop();
-        undoableCommand.execute();
-        context.undoPush(undoableCommand);
+        if (undoableCommand != null) {
+            undoableCommand.redo();
+            context.undoPush(undoableCommand);
+        }
     }
 }

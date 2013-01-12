@@ -116,4 +116,16 @@ public interface ConsoleEditor extends Editor<String>, InputReader, LifeCycle {
      * @return
      */
     Theme getTheme();
+
+    /**
+     * Returns the {@link ConsoleEditor} title.
+     * @return
+     */
+    String getTitle();
+
+    /**
+     * Sets the {@link ConsoleEditor} title.
+     * @param title
+     */
+    void setTitle(String title);
 }

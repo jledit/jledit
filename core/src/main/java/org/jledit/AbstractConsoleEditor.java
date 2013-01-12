@@ -76,6 +76,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
     private File file;
 
+    private String title = EDITOR_NAME;
     private int headerSize = 1;
     private int footerSize = 1;
 
@@ -1091,5 +1092,13 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
     public UndoContext getUndoContext() {
         return undoContext;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

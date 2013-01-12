@@ -970,6 +970,8 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     public void open(File source) throws IOException {
         this.file = source;
         delegate.open(source);
+        this.frameLine = 1;
+        this.frameColumn = 1;
     }
 
     @Override

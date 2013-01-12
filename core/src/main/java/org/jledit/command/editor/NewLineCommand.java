@@ -25,14 +25,18 @@ public class NewLineCommand extends AbstractUndoableCommand {
 
     @Override
     public void execute() {
-        getEditor().setDirty(true);
-        super.execute();
-        getEditor().newLine();
+        if (!getEditor().isReadOnly()) {
+            getEditor().setDirty(true);
+            super.execute();
+            getEditor().newLine();
+        }
     }
 
     @Override
     public void undo() {
-        super.undo();
-        getEditor().mergeLine();
+        if (!getEditor().isReadOnly()) {
+            super.undo();
+            getEditor().mergeLine();
+        }
     }
 }

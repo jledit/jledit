@@ -26,17 +26,21 @@ public class DeleteCommand extends AbstractUndoableCommand {
 
     @Override
     public void execute() {
-        deleted = getEditor().delete();
-        if (deleted != null && !deleted.isEmpty()) {
-            getEditor().setDirty(true);
+        if (!getEditor().isReadOnly()) {
+            deleted = getEditor().delete();
+            if (deleted != null && !deleted.isEmpty()) {
+                getEditor().setDirty(true);
+            }
+            super.execute();
         }
-        super.execute();
     }
 
     @Override
     public void undo() {
-        super.undo();
-        getEditor().put(deleted);
+        if (!getEditor().isReadOnly()) {
+            super.undo();
+            getEditor().put(deleted);
+        }
     }
 
 }

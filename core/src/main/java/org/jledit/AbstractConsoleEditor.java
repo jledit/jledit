@@ -79,6 +79,8 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     private String title = EDITOR_NAME;
     private int headerSize = 1;
     private int footerSize = 1;
+    private boolean readOnly = false;
+    private boolean isOpenEnabled = true;
 
     private String highLight;
 
@@ -1102,5 +1104,21 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
+
+    public boolean isOpenEnabled() {
+        return isOpenEnabled;
+    }
+
+    public void setOpenEnabled(boolean openEnabled) {
+        isOpenEnabled = openEnabled;
     }
 }

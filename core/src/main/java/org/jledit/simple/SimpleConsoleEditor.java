@@ -144,13 +144,21 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
     private void addHelpLines(List<String> helpLines) {
         helpLines.clear();
         StringBuilder sb = new StringBuilder();
+        boolean startOfLine = true;
         for (Map.Entry<String, String> entry : supportedOperations.entrySet()) {
             String key = entry.getKey();
             String desc = entry.getValue();
-            String txt = "     " + key + " " + desc;
+            String txt;
+            if (startOfLine) {
+                txt = key + " " + desc;
+                startOfLine = false;
+            } else {
+                txt = "     " + key + " " + desc;
+            }
             if (txt.length() + sb.length() > getTerminal().getWidth()) {
                 helpLines.add(sb.toString());
                 sb.delete(0, sb.length());
+                startOfLine = true;
             }
             sb.append(txt);
         }
@@ -261,5 +269,27 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
     public void setDirty(Boolean dirty) {
         super.setDirty(dirty);
         redrawHeader();
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        super.setReadOnly(readOnly);
+        if (readOnly) {
+            supportedOperations.remove("^S");
+        } else {
+            supportedOperations.put("^S", "Save");
+        }
+        addHelpLines(helpLines);
+    }
+
+    @Override
+    public void setOpenEnabled(boolean openEnabled) {
+        super.setOpenEnabled(openEnabled);
+        if (!openEnabled) {
+            supportedOperations.remove("^O");
+        } else {
+            supportedOperations.put("^O", "Open");
+        }
+        addHelpLines(helpLines);
     }
 }

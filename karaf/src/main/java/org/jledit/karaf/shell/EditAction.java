@@ -110,6 +110,7 @@ public class EditAction extends AbstractAction {
 
         //Call the editor
         ConsoleEditor editor = editorFactory.create(getTerminal());
+        editor.setTitle("Karaf");
         editor.open(file);
         editor.start();
 

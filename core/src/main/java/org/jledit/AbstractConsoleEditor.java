@@ -1052,7 +1052,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
     @Override
     public Boolean isDirty() {
-        return file == null || delegate.isDirty();
+        return delegate.isDirty();
     }
 
     @Override

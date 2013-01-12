@@ -17,7 +17,7 @@ package org.jledit.command.file;
 import org.jledit.command.Command;
 import org.jledit.command.undo.UndoContext;
 import org.jledit.command.undo.UndoContextAware;
-import org.jledit.editor.ConsoleEditor;
+import org.jledit.ConsoleEditor;
 
 import java.io.File;
 import java.io.IOException;

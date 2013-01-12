@@ -16,7 +16,8 @@ package org.jledit.editor;
 
 
 import junit.framework.Assert;
-import org.jledit.editor.internal.StringEditor;
+import org.jledit.Editor;
+import org.jledit.internal.StringEditor;
 import org.jledit.utils.Resources;
 import org.junit.Test;
 

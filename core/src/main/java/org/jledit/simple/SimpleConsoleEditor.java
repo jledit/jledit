@@ -39,9 +39,9 @@ import org.jledit.command.file.FileOpenCommand;
 import org.jledit.command.file.FileSaveCommand;
 import org.jledit.command.undo.RedoCommand;
 import org.jledit.command.undo.UndoCommand;
-import org.jledit.editor.AbstractConsoleEditor;
-import org.jledit.editor.EditorOperation;
-import org.jledit.editor.EditorOperationType;
+import org.jledit.AbstractConsoleEditor;
+import org.jledit.EditorOperation;
+import org.jledit.EditorOperationType;
 import org.jledit.utils.JlEditConsole;
 import org.jledit.utils.internal.KeyMaps;
 

@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-package org.jledit.editor.internal;
+package org.jledit.internal;
 
 
-import org.jledit.editor.Editor;
+import org.jledit.Editor;
 import org.jledit.utils.internal.Charsets;
 import org.jledit.utils.Files;
 
@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
- * An {@link org.jledit.editor.Editor} implementation for {@link String} objects.
+ * An {@link org.jledit.Editor} implementation for {@link String} objects.
  */
 public class StringEditor implements Editor<String> {
 

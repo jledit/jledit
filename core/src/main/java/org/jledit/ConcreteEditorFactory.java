@@ -16,7 +16,6 @@ package org.jledit;
 
 
 import jline.Terminal;
-import org.jledit.editor.ConsoleEditor;
 import org.jledit.utils.Resources;
 
 import java.lang.reflect.Constructor;
@@ -45,7 +44,7 @@ public class ConcreteEditorFactory implements EditorFactory {
     }
 
     /**
-     * Creates a {@link org.jledit.editor.ConsoleEditor} using the specified {@link jline.Terminal}.
+     * Creates a {@link ConsoleEditor} using the specified {@link jline.Terminal}.
      *
      * @return
      * @throws org.jledit.EditorInitializationException
@@ -68,7 +67,7 @@ public class ConcreteEditorFactory implements EditorFactory {
     }
 
     /**
-     * Creates a {@link org.jledit.editor.ConsoleEditor} based on the specified flavor & {@link jline.Terminal}.
+     * Creates a {@link ConsoleEditor} based on the specified flavor & {@link jline.Terminal}.
      *
      * @param flavor
      * @param terminal

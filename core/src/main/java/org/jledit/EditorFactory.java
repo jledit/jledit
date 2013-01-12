@@ -15,7 +15,6 @@
 package org.jledit;
 
 import jline.Terminal;
-import org.jledit.editor.ConsoleEditor;
 
 public interface EditorFactory {
 

@@ -14,7 +14,7 @@
 
 package org.jledit.command;
 
-import org.jledit.editor.EditorOperation;
+import org.jledit.EditorOperation;
 
 public interface CommandFactory {
 

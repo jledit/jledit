@@ -12,39 +12,12 @@
  * limitations under the License.
  */
 
-package org.jledit.editor;
+package org.jledit;
 
 
-public enum EditorOperationType {
+public interface LifeCycle {
 
-    //CURSOR MOVEMENT
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    HOME,
-    END,
+    void start();
 
-    //TEXT_EDITING
-    TYPE,
-    NEWLINE,
-    BACKSAPCE,
-    DELETE,
-    PASTE,
-
-    //FILE MANIPULATION
-    OPEN,
-    SAVE,
-    CLOSE,
-    QUIT,
-
-    //UNDO & REDO
-    UNDO,
-    REDO,
-
-    //SEARCH
-    FIND,
-    FIND_NEXT,
-    FIND_PREVIOUS
-
+    void stop();
 }

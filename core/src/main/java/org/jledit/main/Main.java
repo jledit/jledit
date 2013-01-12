@@ -16,7 +16,7 @@ package org.jledit.main;
 
 import org.jledit.ConcreteEditorFactory;
 import org.jledit.EditorFactory;
-import org.jledit.editor.ConsoleEditor;
+import org.jledit.ConsoleEditor;
 
 import java.io.File;
 

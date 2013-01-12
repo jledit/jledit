@@ -15,7 +15,7 @@
 package org.jledit.command.editor;
 
 import org.jledit.command.undo.UndoableCommand;
-import org.jledit.editor.ConsoleEditor;
+import org.jledit.ConsoleEditor;
 
 /**
  *

@@ -15,7 +15,7 @@
 package org.jledit.utils.internal;
 
 import jline.console.KeyMap;
-import org.jledit.editor.EditorOperationType;
+import org.jledit.EditorOperationType;
 
 public final class KeyMaps {
 

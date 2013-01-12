@@ -15,7 +15,7 @@
 package org.jledit.command.file;
 
 import org.jledit.command.Command;
-import org.jledit.editor.ConsoleEditor;
+import org.jledit.ConsoleEditor;
 
 import java.io.IOException;
 

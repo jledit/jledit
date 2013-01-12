@@ -20,7 +20,7 @@ import org.apache.felix.gogo.commands.Argument;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.AbstractAction;
 import org.jledit.EditorFactory;
-import org.jledit.editor.ConsoleEditor;
+import org.jledit.ConsoleEditor;
 import org.jledit.utils.Closeables;
 
 import java.io.File;

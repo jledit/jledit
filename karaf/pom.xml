@@ -32,7 +32,6 @@
             jline,
             org.fusesource.jansi,
             org.jledit,
-            org.jledit.editor,
             org.apache.felix.service.command,
             org.apache.felix.gogo.commands,
             org.apache.karaf.shell.console;version="[2.2,4)",

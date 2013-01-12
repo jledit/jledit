@@ -41,7 +41,6 @@ or on Windows:
 
 * The whole file is loaded in memory.
 * Resizing of terminal is not well supported.
-* Addiitional work on key mappings per Operating System is required.
 * Save will convert all **\r** characters to **\n**.
 * The base ConsoleEditor implementation needs to be simplified.
 * Possible deadlock when shutting closing the editor.

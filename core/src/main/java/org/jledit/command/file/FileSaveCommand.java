@@ -33,7 +33,7 @@ public class FileSaveCommand implements Command, UndoContextAware {
 
     @Override
     public void execute() {
-        if (editor.isOpenEnabled()) {
+        if (!editor.isReadOnly()) {
             try {
                 if (editor.getFile() == null) {
                     String fileName = editor.readLine("Save to file:");

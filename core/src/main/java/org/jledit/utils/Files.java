@@ -79,7 +79,7 @@ public final class Files {
         FileOutputStream fos = null;
         OutputStreamWriter writer = null;
         try {
-            if (!file.exists() && !file.getParentFile().mkdirs()) {
+            if (!file.exists() && !file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
                 throw new FileNotFoundException("Could not find or create file:" + file.getName());
             }
             fos = new FileOutputStream(file);

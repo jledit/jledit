@@ -28,17 +28,21 @@ public class TypeCommand extends AbstractUndoableCommand {
 
     @Override
     public void execute() {
-        getEditor().put(str);
-        getEditor().setDirty(true);
-        super.execute();
+        if (!getEditor().isReadOnly()) {
+            getEditor().put(str);
+            getEditor().setDirty(true);
+            super.execute();
+        }
 
     }
 
     @Override
     public void undo() {
-        super.undo();
-        for (int i = 0; i < str.length(); i++) {
-            getEditor().backspace();
+        if (!getEditor().isReadOnly()) {
+            super.undo();
+            for (int i = 0; i < str.length(); i++) {
+                getEditor().backspace();
+            }
         }
     }
 }

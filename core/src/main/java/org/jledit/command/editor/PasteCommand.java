@@ -31,18 +31,22 @@ public class PasteCommand extends AbstractUndoableCommand {
 
     @Override
     public void execute() {
-        if (!clipboardContent.isEmpty()) {
-            getEditor().setDirty(true);
-            getEditor().put(clipboardContent);
+        if (!getEditor().isOpenEnabled()) {
+            if (!clipboardContent.isEmpty()) {
+                getEditor().setDirty(true);
+                getEditor().put(clipboardContent);
+            }
+            super.execute();
         }
-        super.execute();
     }
 
     @Override
     public void undo() {
-        super.undo();
-        for (int i = 0; i < clipboardContent.length(); i++) {
-            getEditor().backspace();
+        if (!getEditor().isReadOnly()) {
+            super.undo();
+            for (int i = 0; i < clipboardContent.length(); i++) {
+                getEditor().backspace();
+            }
         }
     }
 

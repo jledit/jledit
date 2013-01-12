@@ -19,10 +19,7 @@ import jline.TerminalFactory;
 import jline.UnixTerminal;
 import jline.WindowsTerminal;
 
-/**
- * This is a special {@link UnixTerminal} that allows access to special characters
- * used by the editor, such as CTRL-C, CTRL-Z & CTRL-S.
- */
+
 public final class JlEditTerminalFactory {
 
     private JlEditTerminalFactory() {

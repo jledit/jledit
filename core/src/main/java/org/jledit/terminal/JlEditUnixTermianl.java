@@ -17,18 +17,23 @@ package org.jledit.terminal;
 
 import jline.UnixTerminal;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public class JlEditUnixTermianl extends UnixTerminal {
 
     private final UnixTerminal delegate;
     private final boolean preExists;
 
     JlEditUnixTermianl(UnixTerminal delegate, boolean preExists) throws Exception {
+        super();
         this.delegate = delegate;
         this.preExists = preExists;
+        this.setUpControlKeys();
     }
 
-    @Override
-    public void init() throws Exception {
+    public void setUpControlKeys() throws Exception {
         getSettings().set("intr undef");
         //We want to be able to use CTRL-Z for undo
         getSettings().set("susp undef");
@@ -50,13 +55,17 @@ public class JlEditUnixTermianl extends UnixTerminal {
         }
     }
 
+    /**
+     * Subclass to change behavior if needed.
+     * @return the passed out
+     */
     @Override
-    public void reset() throws Exception {
-        if (preExists) {
-            init();
-        } else {
-            delegate.reset();
-            init();
-        }
+    public OutputStream wrapOutIfNeeded(OutputStream out) {
+        return delegate.wrapOutIfNeeded(out);
+    }
+
+    @Override
+    public InputStream wrapInIfNeeded(InputStream in) throws IOException {
+        return delegate.wrapInIfNeeded(in);
     }
 }

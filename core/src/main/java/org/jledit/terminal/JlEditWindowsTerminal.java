@@ -16,12 +16,17 @@ package org.jledit.terminal;
 
 import jline.WindowsTerminal;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public class JlEditWindowsTerminal extends WindowsTerminal {
 
     private final WindowsTerminal delegate;
     private final boolean preExists;
 
     public JlEditWindowsTerminal(WindowsTerminal delegate, boolean preExists) throws Exception {
+        super();
         this.delegate = delegate;
         this.preExists = preExists;
     }
@@ -33,5 +38,20 @@ public class JlEditWindowsTerminal extends WindowsTerminal {
         } else {
             delegate.restore();
         }
+    }
+
+    /**
+     * Subclass to change behavior if needed.
+     *
+     * @return the passed out
+     */
+    @Override
+    public OutputStream wrapOutIfNeeded(OutputStream out) {
+        return delegate.wrapOutIfNeeded(out);
+    }
+
+    @Override
+    public InputStream wrapInIfNeeded(InputStream in) throws IOException {
+        return delegate.wrapInIfNeeded(in);
     }
 }

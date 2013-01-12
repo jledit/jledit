@@ -16,6 +16,7 @@ package org.jledit.editor;
 
 
 import jline.Terminal;
+import jline.TerminalFactory;
 import jline.WindowsTerminal;
 import jline.console.KeyMap;
 import jline.console.Operation;
@@ -108,8 +109,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         final InputStream wrapped = terminal.wrapInIfNeeded(System.in);
 
         this.in = new NonBlockingInputStream(wrapped, nonBlockingEnabled);
-        this.reader = new InputStreamReader(this.in, Charset.defaultCharset());
-        this.terminal.reset();
+        this.reader = new InputStreamReader(this.in);
     }
 
     /**

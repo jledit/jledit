@@ -34,7 +34,5 @@ public class MoveCursorLeftCommand implements Command {
     @Override
     public void execute() {
         editor.moveLeft(number);
-        editor.redrawHeader();
-        editor.redrawFooter();
     }
 }

@@ -163,8 +163,8 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
      */
     public void hide() {
         JlEditConsole.out.print("\33[" + 1 + ";" + terminal.getHeight() + ";r");
-        JlEditConsole.out.print(ansi().eraseScreen());
         JlEditConsole.out.print(ansi().cursor(1, 1));
+        JlEditConsole.out.print(ansi().eraseScreen(Erase.ALL));
         flush();
         try {
             terminal.restore();
@@ -365,8 +365,10 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 undoContext.undoPush((UndoableCommand) command);
             }
             command.execute();
-            redrawCoords();
-            flush();
+            if (running) {
+                redrawCoords();
+                flush();
+            }
         } catch (Exception ex) {
             //noop.
         }

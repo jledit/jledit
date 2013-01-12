@@ -23,47 +23,72 @@ import org.jledit.ConsoleEditor;
 public abstract class AbstractUndoableCommand implements UndoableCommand {
 
     private final ConsoleEditor editor;
-    private int line;
-    private int column;
+    private int beforeLine;
+    private int beforeColumn;
+    private int afterLine;
+    private int afterColumn;
 
     public AbstractUndoableCommand(ConsoleEditor editor) {
         this.editor = editor;
     }
 
-    /**
-     * Moves cursor to the right place for the undo operation.
-     */
-    @Override
-    public void undo() {
-        editor.move(line, column);
-    }
 
     /**
      * Stores cursor coordinates.
      */
     @Override
-    public void execute() {
-        line = editor.getLine();
-        column = editor.getColumn();
+    public final void execute() {
+        beforeLine = editor.getLine();
+        beforeColumn = editor.getColumn();
+        doExecute();
+        afterLine = editor.getLine();
+        afterColumn = editor.getColumn();
+    }
+
+    /**
+     * Executes the {@link org.jledit.command.Command} again.
+     */
+    @Override
+    public final void redo() {
+        if (!getEditor().isReadOnly()) {
+            getEditor().move(getBeforeLine(), getBeforeColumn());
+            doExecute();
+        }
     }
 
     public ConsoleEditor getEditor() {
         return editor;
     }
 
-    public int getLine() {
-        return line;
+    public int getBeforeLine() {
+        return beforeLine;
     }
 
-    public void setLine(int line) {
-        this.line = line;
+    public void setBeforeLine(int line) {
+        this.beforeLine = line;
     }
 
-    public int getColumn() {
-        return column;
+    public int getBeforeColumn() {
+        return beforeColumn;
     }
 
-    public void setColumn(int column) {
-        this.column = column;
+    public void setBeforeColumn(int column) {
+        this.beforeColumn = column;
+    }
+
+    public int getAfterLine() {
+        return afterLine;
+    }
+
+    public void setAfterLine(int afterLine) {
+        this.afterLine = afterLine;
+    }
+
+    public int getAfterColumn() {
+        return afterColumn;
+    }
+
+    public void setAfterColumn(int afterColumn) {
+        this.afterColumn = afterColumn;
     }
 }

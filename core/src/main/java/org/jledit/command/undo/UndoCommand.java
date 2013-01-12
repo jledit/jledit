@@ -21,7 +21,7 @@ import org.jledit.Editor;
 public class UndoCommand implements UndoContextAware, Command {
 
     private UndoContext context;
-    private final Editor editor;
+    private final ConsoleEditor editor;
 
     public UndoCommand(ConsoleEditor editor) {
         this.context = new UndoContext();
@@ -43,8 +43,8 @@ public class UndoCommand implements UndoContextAware, Command {
             UndoableCommand undoableCommand = context.undoPop();
             if (undoableCommand != null) {
                 undoableCommand.undo();
+                context.redoPush(undoableCommand);
             }
-            context.redoPush(undoableCommand);
             editor.setDirty(context.isDirty());
         }
     }

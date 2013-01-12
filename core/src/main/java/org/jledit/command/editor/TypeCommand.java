@@ -26,12 +26,10 @@ public class TypeCommand extends AbstractUndoableCommand {
         this.str = str;
     }
 
-    @Override
-    public void execute() {
+    public void doExecute() {
         if (!getEditor().isReadOnly()) {
             getEditor().put(str);
             getEditor().setDirty(true);
-            super.execute();
         }
 
     }
@@ -39,9 +37,9 @@ public class TypeCommand extends AbstractUndoableCommand {
     @Override
     public void undo() {
         if (!getEditor().isReadOnly()) {
-            super.undo();
+            getEditor().move(getBeforeLine(), getBeforeColumn());
             for (int i = 0; i < str.length(); i++) {
-                getEditor().backspace();
+                getEditor().delete();
             }
         }
     }

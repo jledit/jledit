@@ -112,6 +112,7 @@ public class EditAction extends AbstractAction {
         ConsoleEditor editor = editorFactory.create(getTerminal());
         editor.setTitle("Karaf");
         editor.open(file);
+        editor.setOpenEnabled(false);
         editor.start();
 
         //If resource is not local, copy the resource back.

@@ -31,7 +31,7 @@ public class PasteCommand extends AbstractUndoableCommand {
 
     @Override
     public void execute() {
-        if (!getEditor().isOpenEnabled()) {
+        if (!getEditor().isReadOnly()) {
             if (!clipboardContent.isEmpty()) {
                 getEditor().setDirty(true);
                 getEditor().put(clipboardContent);

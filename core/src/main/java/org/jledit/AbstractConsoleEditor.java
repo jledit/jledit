@@ -73,6 +73,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     private Reader reader;
 
     private File file;
+    private String displayAs = "<no file>";
 
     private String title = EDITOR_NAME;
     private int headerSize = 1;
@@ -158,7 +159,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
      * Hides the editor screen and restore the {@link Terminal}.
      */
     public void hide() {
-        JlEditConsole.out.print("\33[" + 1 + ";" + terminal.getHeight()  + ";r");
+        JlEditConsole.out.print("\33[" + 1 + ";" + terminal.getHeight() + ";r");
         //Erase screen doesn't behave well on windows.
         for (int l = 1; l <= terminal.getHeight(); l++) {
             JlEditConsole.out.print(ansi().cursor(l, 1));
@@ -971,11 +972,17 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     }
 
     @Override
-    public void open(File source) throws IOException {
+    public void open(File source, String displayAs) throws IOException {
+        this.displayAs = displayAs;
         this.file = source;
         delegate.open(source);
         this.frameLine = 1;
         this.frameColumn = 1;
+    }
+
+    @Override
+    public void open(File source) throws IOException {
+        open(source, source.getPath());
     }
 
     @Override
@@ -1122,5 +1129,13 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
     public void setOpenEnabled(boolean openEnabled) {
         isOpenEnabled = openEnabled;
+    }
+
+    public String getDisplayAs() {
+        return displayAs;
+    }
+
+    public void setDisplayAs(String displayAs) {
+        this.displayAs = displayAs;
     }
 }

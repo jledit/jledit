@@ -43,6 +43,7 @@ import org.jledit.AbstractConsoleEditor;
 import org.jledit.EditorOperation;
 import org.jledit.EditorOperationType;
 import org.jledit.utils.JlEditConsole;
+import org.jledit.utils.Strings;
 import org.jledit.utils.internal.KeyMaps;
 
 import java.util.LinkedHashMap;
@@ -76,7 +77,6 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
     public void redrawHeader() {
         saveCursorPosition();
         JlEditConsole.out.print(ansi().cursor(1, 1));
-        String fileName = getFile() != null ? getFile().getName() : "<no file>";
         Ansi style = ansi();
         if (getTheme().getHeaderBackground() != null) {
             style.bg(getTheme().getHeaderBackground());
@@ -84,9 +84,9 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
         if (getTheme().getHeaderForeground() != null) {
             style.fg(getTheme().getHeaderForeground());
         }
-
-        JlEditConsole.out.print(style.a(getTitle()).a(":").a(fileName).a(isDirty() ? DIRTY_SIGN : "").eraseLine(Ansi.Erase.FORWARD));
         String textCoords = "L:" + getLine() + " C:" + getColumn();
+        int displayFileLength = getTerminal().getWidth() - getTitle().length() - textCoords.length() - 1;
+        JlEditConsole.out.print(style.a(getTitle()).a(":").a(Strings.tryToTrimToSize(getDisplayAs(), displayFileLength)).a(isDirty() ? DIRTY_SIGN : "").eraseLine(Ansi.Erase.FORWARD));
         JlEditConsole.out.print(ansi().cursor(1, getTerminal().getWidth() - textCoords.length()));
         JlEditConsole.out.print(ansi().a(textCoords).reset());
         JlEditConsole.out.print(ansi().cursor(getTerminal().getHeight(), 1));

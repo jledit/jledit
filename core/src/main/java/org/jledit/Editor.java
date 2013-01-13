@@ -124,6 +124,7 @@ public interface Editor<C> extends Closeable {
 
     /**
      * Returns the number of lines.
+     *
      * @return
      */
     int lines();

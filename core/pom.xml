@@ -48,6 +48,7 @@
             org.jledit.command*;-noimport:=true,
             org.jledit.terminal;-noimport:=true
         </osgi.export>
+        <osgi.export.service>org.jledit.EditorFactory</osgi.export.service>
     </properties>
 
 

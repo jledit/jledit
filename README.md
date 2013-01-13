@@ -4,6 +4,8 @@ An extensible [Jansi](http://jansi.fusesource.org/) & [Jline](https://github.com
 
 The editor is using [Jansi](http://jansi.fusesource.org/) for ansi escape sequence manipulation. It also uses [Jline](https://github.com/jline/jline2 "Jline") terminals, streams and key maps.
 
+It works as a standalone editor, but it can also be use from jline based applications.
+
 **Editor Features**
 
 * Scrolling
@@ -13,6 +15,9 @@ The editor is using [Jansi](http://jansi.fusesource.org/) for ansi escape sequen
 
 **Building**
 
+You can download a standalone version of the editor from [Maven Central](http://repo1.maven.org/maven2/org/jledit/jledit/0.1.1/).
+You can also build the editor from source.
+
 Buidling requires:
 * Java 1.6+
 * Maven 3
@@ -21,18 +26,18 @@ Buidling requires:
 
 **Running**
 
-Once the build is done:
+Once the build or download is done:
 
     >cd jledit/target
-    >tar -zxvf jledit-0.1-SNAPSHOT-bin.tar.gz
-    > cd jledit-0.1-SNAPSHOT
+    >tar -zxvf jledit-0.1.1-bin.tar.gz
+    > cd jledit-0.1.1
     > ./bin/jledit /path/to/myfile
 
 or on Windows:
 
     >cd jledit/target
-    > unzip jledit-0.1-SNAPSHOT-bin.zip
-    > cd jledit-0.1-SNAPSHOT/bin
+    > unzip jledit-0.1.1-bin.zip
+    > cd jledit-0.1.1/bin
     > jledit.bat /path/to/myfile
 
 

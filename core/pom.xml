@@ -55,6 +55,7 @@
         <dependency>
             <groupId>com.googlecode.juniversalchardet</groupId>
             <artifactId>juniversalchardet</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>jline</groupId>

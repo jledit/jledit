@@ -19,9 +19,6 @@ import jline.Terminal;
 import jline.WindowsTerminal;
 import jline.console.KeyMap;
 import jline.console.Operation;
-import jline.internal.Configuration;
-import jline.internal.InputStreamReader;
-import jline.internal.NonBlockingInputStream;
 import org.fusesource.jansi.Ansi;
 import org.jledit.collection.RollingStack;
 import org.jledit.command.Command;
@@ -29,7 +26,8 @@ import org.jledit.command.CommandFactory;
 import org.jledit.command.undo.UndoContext;
 import org.jledit.command.undo.UndoContextAware;
 import org.jledit.command.undo.UndoableCommand;
-import org.jledit.internal.StringEditor;
+import org.jledit.jline.InputStreamReader;
+import org.jledit.jline.NonBlockingInputStream;
 import org.jledit.terminal.JlEditTerminalFactory;
 import org.jledit.theme.DefaultTheme;
 import org.jledit.theme.Theme;
@@ -88,7 +86,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     private Theme theme = new DefaultTheme();
 
     public AbstractConsoleEditor(final Terminal term) throws Exception {
-        this.encoding = encoding != null ? encoding : Configuration.getEncoding();
         this.terminal = JlEditTerminalFactory.get(term);
     }
 
@@ -108,7 +105,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         }
 
         final InputStream wrapped = terminal.wrapInIfNeeded(System.in);
-
         this.in = new NonBlockingInputStream(wrapped, nonBlockingEnabled);
         this.reader = new InputStreamReader(this.in);
     }
@@ -162,9 +158,13 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
      * Hides the editor screen and restore the {@link Terminal}.
      */
     public void hide() {
-        JlEditConsole.out.print("\33[" + 1 + ";" + terminal.getHeight() + ";r");
+        JlEditConsole.out.print("\33[" + 1 + ";" + terminal.getHeight()  + ";r");
+        //Erase screen doesn't behave well on windows.
+        for (int l = 1; l <= terminal.getHeight(); l++) {
+            JlEditConsole.out.print(ansi().cursor(l, 1));
+            JlEditConsole.out.print(ansi().eraseLine(Erase.FORWARD));
+        }
         JlEditConsole.out.print(ansi().cursor(1, 1));
-        JlEditConsole.out.print(ansi().eraseScreen(Erase.ALL));
         flush();
         try {
             terminal.restore();

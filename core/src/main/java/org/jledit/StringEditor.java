@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jledit.internal;
+package org.jledit;
 
 
 import org.jledit.Editor;

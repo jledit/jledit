@@ -14,6 +14,7 @@
 
 package org.jledit.terminal;
 
+import jline.AnsiWindowsTerminal;
 import jline.Terminal;
 import jline.TerminalFactory;
 import jline.UnixTerminal;
@@ -62,9 +63,9 @@ public final class JlEditTerminalFactory {
      */
     public static Terminal get(Terminal terminal, boolean preExists) throws Exception {
         if (UnixTerminal.class.isAssignableFrom(terminal.getClass())) {
-            return new JlEditUnixTermianl((UnixTerminal) terminal, preExists);
+            return new JlEditUnixTerminal((UnixTerminal) terminal, preExists);
         } else if (WindowsTerminal.class.isAssignableFrom(terminal.getClass())) {
-            return new JlEditWindowsTerminal((WindowsTerminal) terminal, preExists);
+            return new JlEditWindowsTerminal((AnsiWindowsTerminal) terminal, preExists);
         } else {
             return terminal;
         }

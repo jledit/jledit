@@ -30,9 +30,10 @@
     <properties>
         <osgi.activator>org.jledit.osgi.Activator</osgi.activator>
         <osgi.import>
-            jline*,
+            jline,
+            jline.console,
             org.fusesource.jansi*,
-            *
+            org.osgi.framework
         </osgi.import>
         <osgi.private>
             org.mozilla.universalchardet*,
@@ -40,7 +41,6 @@
             org.jledit.utils.internal,
             org.jledit.collection,
             org.jledit.simple,
-            org.jledit.internal,
             org.jledit.main,
             org.jledit.osgi
         </osgi.private>
@@ -48,7 +48,8 @@
             org.jledit;-noimport:=true,
             org.jledit.theme*;-noimport:=true,
             org.jledit.command*;-noimport:=true,
-            org.jledit.terminal;-noimport:=true
+            org.jledit.terminal;-noimport:=true,
+            org.jledit.jline;-noimport:=true,
         </osgi.export>
         <osgi.export.service>org.jledit.EditorFactory</osgi.export.service>
     </properties>

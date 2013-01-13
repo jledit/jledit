@@ -14,18 +14,19 @@
 
 package org.jledit.terminal;
 
+import jline.AnsiWindowsTerminal;
 import jline.WindowsTerminal;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class JlEditWindowsTerminal extends WindowsTerminal {
+public class JlEditWindowsTerminal extends AnsiWindowsTerminal {
 
-    private final WindowsTerminal delegate;
+    private final AnsiWindowsTerminal delegate;
     private final boolean preExists;
 
-    public JlEditWindowsTerminal(WindowsTerminal delegate, boolean preExists) throws Exception {
+    public JlEditWindowsTerminal(AnsiWindowsTerminal delegate, boolean preExists) throws Exception {
         super();
         this.delegate = delegate;
         this.preExists = preExists;
@@ -40,6 +41,37 @@ public class JlEditWindowsTerminal extends WindowsTerminal {
         }
     }
 
+    @Override
+    public void setEchoEnabled(boolean enabled) {
+        delegate.setEchoEnabled(enabled);
+    }
+
+    /**
+     * Whether or not to allow the use of the JNI console interaction.
+     */
+    @Override
+    public void setDirectConsole(boolean flag) {
+        delegate.setDirectConsole(flag);
+    }
+
+    /**
+     * Whether or not to allow the use of the JNI console interaction.
+     */
+    @Override
+    public Boolean getDirectConsole() {
+        return delegate.getDirectConsole();
+    }
+
+    @Override
+    public boolean isAnsiSupported() {
+        return delegate.isAnsiSupported();
+    }
+
+    @Override
+    public boolean hasWeirdWrap() {
+        return delegate.hasWeirdWrap();
+    }
+
     /**
      * Subclass to change behavior if needed.
      *
@@ -52,6 +84,9 @@ public class JlEditWindowsTerminal extends WindowsTerminal {
 
     @Override
     public InputStream wrapInIfNeeded(InputStream in) throws IOException {
+        if (preExists) {
+            return in;
+        }
         return delegate.wrapInIfNeeded(in);
     }
 }

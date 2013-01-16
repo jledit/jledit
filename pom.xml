@@ -156,17 +156,20 @@
                 <groupId>com.googlecode.juniversalchardet</groupId>
                 <artifactId>juniversalchardet</artifactId>
                 <version>${juniversalchardet.version}</version>
+                <scope>provided</scope>
             </dependency>
             <!-- OSGi Dependencies -->
             <dependency>
                 <groupId>org.osgi</groupId>
                 <artifactId>org.osgi.core</artifactId>
                 <version>${osgi.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.osgi</groupId>
                 <artifactId>org.osgi.compendium</artifactId>
                 <version>${osgi.version}</version>
+                <scope>provided</scope>
             </dependency>
             <!-- Testing Dependencies -->
             <dependency>

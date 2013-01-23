@@ -304,7 +304,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     }
 
 
-    private EditorOperation readOperation() throws IOException {
+    protected EditorOperation readOperation() throws IOException {
         StringBuilder sb = new StringBuilder();
         Stack<Character> pushBackChar = new Stack<Character>();
         while (true) {
@@ -638,7 +638,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             if (frameColumn > actualContentLength + 1 || getColumn() > actualContentLength) {
                 frameColumn = 1;
                 moveDown(1);
-                home();
+                moveToStartOfLine();
                 //Check if the current line is displayed using more lines and we need to move to the next one.
             } else if (frameColumn > terminal.getWidth()) {
                 String currentLine = getContent(getLine());
@@ -668,7 +668,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     /**
      * Moves cursor to the end of the current line.
      */
-    public void end() {
+    public void moveToEndOfLine() {
         String currentLine = getContent(getLine());
         LinkedList<String> toDisplayLines = toDisplayLines(currentLine);
         int remainingLines = getColumn() / terminal.getWidth() + 1;
@@ -676,7 +676,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             toDisplayLines.removeFirst();
         }
         frameColumn = currentLine.length();
-        delegate.end();
+        delegate.moveToEndOfLine();
         for (int l = 0; l < toDisplayLines.size(); l++) {
             frameLine++;
             frameColumn -= terminal.getWidth();
@@ -694,7 +694,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     /**
      * Moves cursor to the end of the current line.
      */
-    public void home() {
+    public void moveToStartOfLine() {
         String currentLine = getContent(getLine());
         LinkedList<String> toDisplayLines = toDisplayLines(currentLine);
         int remainingLines = toDisplayLines.size() - getColumn() / terminal.getWidth();
@@ -702,7 +702,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             toDisplayLines.removeLast();
         }
         frameColumn = 1;
-        delegate.home();
+        delegate.moveToStartOfLine();
         for (int l = toDisplayLines.size() - 1; l >= 0; l--) {
             frameLine--;
             if (frameLine <= 0) {
@@ -716,6 +716,24 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
     }
 
+
+    /**
+     * Moves the cursors to the start of the line.
+     */
+    @Override
+    public void moveToStartOfFile() {
+        delegate.moveToStartOfFile();
+        redrawRestOfScreen();
+    }
+
+    /**
+     * Moves cursor to the end of the line.
+     */
+    @Override
+    public void moveToEndOfFile() {
+        delegate.moveToEndOfFile();
+        redrawText();
+    }
 
     @Override
     public void put(String str) {
@@ -785,7 +803,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         //Check if we need to merge with previous line.
         if (getColumn() == 1) {
             moveUp(1);
-            end();
+            moveToEndOfLine();
             //end() will just move the cursor to the last char. We want to move it one more char to the right.
             delegate.move(getLine(), getColumn() + 1);
             mergeLine();

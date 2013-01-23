@@ -19,14 +19,35 @@ import org.jledit.ConsoleEditor;
 
 public class NewLineCommand extends AbstractUndoableCommand {
 
+    private final Position position;
+
     public NewLineCommand(ConsoleEditor editor) {
+        this(editor, Position.CURRENT);
+    }
+
+    public NewLineCommand(ConsoleEditor editor, Position position) {
         super(editor);
+        this.position = position;
     }
 
     public void doExecute() {
+
         if (!getEditor().isReadOnly()) {
             getEditor().setDirty(true);
-            getEditor().newLine();
+            switch (position) {
+                case CURRENT:
+                    getEditor().newLine();
+                    break;
+                case NEXT_LINE:
+                    getEditor().moveToEndOfLine();
+                    getEditor().newLine();
+                    break;
+                case PREVIOUS_LINE:
+                    getEditor().moveToStartOfLine();
+                    getEditor().newLine();
+                    getEditor().moveUp(1);
+                    break;
+            }
         }
     }
 
@@ -34,8 +55,17 @@ public class NewLineCommand extends AbstractUndoableCommand {
     @Override
     public void undo() {
         if (!getEditor().isReadOnly()) {
-            getEditor().move(getBeforeLine(), getBeforeColumn());
-            getEditor().mergeLine();
+            switch (position) {
+                case CURRENT:
+                case NEXT_LINE:
+                    getEditor().move(getBeforeLine(), getBeforeColumn());
+                    getEditor().mergeLine();
+                    break;
+                case PREVIOUS_LINE:
+                    getEditor().move(getBeforeLine() - 1, getBeforeColumn());
+                    getEditor().mergeLine();
+                    break;
+            }
         }
     }
 }

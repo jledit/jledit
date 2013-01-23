@@ -61,7 +61,6 @@ public class StringEditor implements Editor<String> {
      * If the requested line is greater that the actual lines number and exception is thrown.
      * If the requested column is greater than the line width, the index is moved to the end of the line.
      *
-     *
      * @param line
      * @param column
      * @throws IndexOutOfBoundsException When the requested line exceeds the number of lines in the content.
@@ -85,7 +84,7 @@ public class StringEditor implements Editor<String> {
      * Moves the cursors to the start of the line.
      */
     @Override
-    public synchronized void home() {
+    public synchronized void moveToStartOfLine() {
         move(line, 1);
     }
 
@@ -93,8 +92,25 @@ public class StringEditor implements Editor<String> {
      * Moves cursor to the end of the line.
      */
     @Override
-    public synchronized void end() {
+    public synchronized void moveToEndOfLine() {
         move(line, getContent(line).length());
+    }
+
+    /**
+     * Moves the cursors to the start of the line.
+     */
+    @Override
+    public void moveToStartOfFile() {
+        move(1, 1);
+    }
+
+    /**
+     * Moves cursor to the end of the line.
+     */
+    @Override
+    public void moveToEndOfFile() {
+        int targetLine = lines.size() + 1;
+        move(targetLine, getContent(targetLine).length());
     }
 
     @Override

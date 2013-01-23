@@ -18,16 +18,38 @@ import org.jledit.ConsoleEditor;
 
 public class DeleteCommand extends AbstractUndoableCommand {
 
+    private final DeleteType type;
     private String deleted;
 
     public DeleteCommand(ConsoleEditor editor) {
+        this(editor, DeleteType.CHARACTER);
+    }
+
+    public DeleteCommand(ConsoleEditor editor, DeleteType type) {
         super(editor);
+        this.type = type;
     }
 
     @Override
     public void doExecute() {
         if (!getEditor().isReadOnly()) {
-            deleted = getEditor().delete();
+            StringBuilder deletedBuilder = new StringBuilder();
+            String currentLine = getEditor().getContent(getEditor().getLine());
+            //We want to know how many chars to delete, before we actually delete them.
+            int charsToDelete = 1;
+            switch (type) {
+                case CHARACTER:
+                    charsToDelete = 1;
+                    break;
+                case LINE:
+                    getEditor().moveToStartOfLine();
+                case TO_END_OF_LINE:
+                    charsToDelete = currentLine.length() - getEditor().getColumn() - 1;
+            }
+            for (int c = 0; c < charsToDelete; c++) {
+                deletedBuilder.append(getEditor().delete());
+            }
+            deleted = deletedBuilder.toString();
             if (deleted != null && !deleted.isEmpty()) {
                 getEditor().setDirty(true);
             }
@@ -37,7 +59,14 @@ public class DeleteCommand extends AbstractUndoableCommand {
     @Override
     public void undo() {
         if (!getEditor().isReadOnly()) {
-            getEditor().move(getBeforeLine(), getBeforeColumn());
+            switch (type) {
+                case CHARACTER:
+                case TO_END_OF_LINE:
+                    getEditor().move(getBeforeLine(), getBeforeColumn());
+                    break;
+                case LINE:
+                    getEditor().move(getBeforeLine(), 1);
+            }
             getEditor().put(deleted);
         }
     }

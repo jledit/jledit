@@ -27,8 +27,8 @@ import org.jledit.command.editor.FindPreviousCommand;
 import org.jledit.command.editor.MoveCursorDownCommand;
 import org.jledit.command.editor.MoveCursorLeftCommand;
 import org.jledit.command.editor.MoveCursorRightCommand;
-import org.jledit.command.editor.MoveCursorToEndCommand;
-import org.jledit.command.editor.MoveCursorToHomeCommand;
+import org.jledit.command.editor.MoveCursorToEndOfLineCommand;
+import org.jledit.command.editor.MoveCursorToStartOfLineCommand;
 import org.jledit.command.editor.MoveCursorUpCommand;
 import org.jledit.command.editor.NewLineCommand;
 import org.jledit.command.editor.PasteCommand;
@@ -179,10 +179,10 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
             case PASTE:
                 return new PasteCommand(this);
             //Cursor operations
-            case HOME:
-                return new MoveCursorToHomeCommand(this);
-            case END:
-                return new MoveCursorToEndCommand(this);
+            case START_OF_LINE:
+                return new MoveCursorToStartOfLineCommand(this);
+            case END_OF_LINE:
+                return new MoveCursorToEndOfLineCommand(this);
             case UP:
                 return new MoveCursorUpCommand(this);
             case DOWN:

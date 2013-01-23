@@ -31,11 +31,11 @@ public final class KeyMaps {
         map.bind("\033[0D", EditorOperationType.DOWN);
 
         // Windows
-        map.bind("\340\107", EditorOperationType.HOME);
+        map.bind("\340\107", EditorOperationType.START_OF_LINE);
         map.bind("\340\110", EditorOperationType.UP);
         map.bind("\340\113", EditorOperationType.LEFT);
         map.bind("\340\115", EditorOperationType.RIGHT);
-        map.bind("\340\117", EditorOperationType.END);
+        map.bind("\340\117", EditorOperationType.END_OF_LINE);
         map.bind("\340\120", EditorOperationType.DOWN);
 
         map.bind("\340\123", EditorOperationType.DELETE);
@@ -49,15 +49,15 @@ public final class KeyMaps {
         map.bind("\033[B", EditorOperationType.DOWN);
         map.bind("\033[C", EditorOperationType.RIGHT);
         map.bind("\033[D", EditorOperationType.LEFT);
-        map.bind("\033[H", EditorOperationType.HOME);
-        map.bind("\033[F", EditorOperationType.END);
+        map.bind("\033[H", EditorOperationType.START_OF_LINE);
+        map.bind("\033[F", EditorOperationType.END_OF_LINE);
 
         map.bind("\033[OA", EditorOperationType.UP);
         map.bind("\033[OB", EditorOperationType.DOWN);
         map.bind("\033[OC", EditorOperationType.RIGHT);
         map.bind("\033[OD", EditorOperationType.LEFT);
-        map.bind("\033[OH", EditorOperationType.HOME);
-        map.bind("\033[OF", EditorOperationType.END);
+        map.bind("\033[OH", EditorOperationType.START_OF_LINE);
+        map.bind("\033[OF", EditorOperationType.END_OF_LINE);
 
         map.bind("\033[3~", EditorOperationType.DELETE);
 

@@ -15,26 +15,44 @@
 package org.jledit.command.editor;
 
 import org.jledit.ConsoleEditor;
-
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
+import org.jledit.utils.ClipboardUtils;
 
 public class PasteCommand extends AbstractUndoableCommand {
 
     private final String clipboardContent;
+    private final Position position;
 
     public PasteCommand(ConsoleEditor editor) {
+        this(editor, Position.CURRENT);
+    }
+
+    public PasteCommand(ConsoleEditor editor, Position position) {
         super(editor);
-        this.clipboardContent = getClipboardContent();
+        this.position = position;
+        this.clipboardContent = ClipboardUtils.getContnet();
     }
 
     @Override
     public void doExecute() {
         if (!getEditor().isReadOnly()) {
+            getEditor().setDirty(true);
             if (!clipboardContent.isEmpty()) {
-                getEditor().setDirty(true);
-                getEditor().put(clipboardContent);
+                switch (position) {
+                    case CURRENT:
+                        getEditor().put(clipboardContent);
+                        break;
+                    case NEXT_LINE:
+                        getEditor().moveToEndOfLine();
+                        getEditor().newLine();
+                        getEditor().put(clipboardContent);
+                        break;
+                    case PREVIOUS_LINE:
+                        getEditor().moveToStartOfLine();
+                        getEditor().newLine();
+                        getEditor().moveUp(1);
+                        getEditor().put(clipboardContent);
+                        break;
+                }
             }
         }
     }
@@ -42,21 +60,25 @@ public class PasteCommand extends AbstractUndoableCommand {
     @Override
     public void undo() {
         if (!getEditor().isReadOnly()) {
-            getEditor().move(getBeforeLine(), getBeforeColumn());
-            for (int i = 0; i < clipboardContent.length(); i++) {
-                getEditor().delete();
+            switch (position) {
+                case NEXT_LINE:
+                    getEditor().move(getBeforeLine(), getBeforeColumn());
+                    getEditor().mergeLine();
+                case CURRENT:
+                    getEditor().move(getBeforeLine(), getBeforeColumn());
+                    for (int i = 0; i < clipboardContent.length(); i++) {
+                        getEditor().delete();
+                    }
+                    break;
+                case PREVIOUS_LINE:
+                    getEditor().move(getBeforeLine() - 1, getBeforeColumn());
+                    getEditor().mergeLine();
+                    getEditor().move(getBeforeLine(), getBeforeColumn());
+                    for (int i = 0; i < clipboardContent.length(); i++) {
+                        getEditor().delete();
+                    }
+                    break;
             }
         }
-    }
-
-    public final String getClipboardContent() {
-        String result = "";
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        try {
-            result = (String) clipboard.getData(DataFlavor.stringFlavor);
-        } catch (Exception ex) {
-            //noop
-        }
-        return result;
     }
 }

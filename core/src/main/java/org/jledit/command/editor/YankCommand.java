@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,19 +14,37 @@
 
 package org.jledit.command.editor;
 
-import org.jledit.command.Command;
 import org.jledit.ConsoleEditor;
+import org.jledit.command.Command;
+import org.jledit.utils.ClipboardUtils;
 
-public class MoveCursorToHomeCommand implements Command {
+public class YankCommand implements Command {
 
     private final ConsoleEditor editor;
+    private final int lines;
 
-    public MoveCursorToHomeCommand(ConsoleEditor editor) {
-        this.editor = editor;
+    public YankCommand(ConsoleEditor editor) {
+        this(editor, 1);
     }
 
+    public YankCommand(ConsoleEditor editor, int lines) {
+        this.editor = editor;
+        this.lines = lines;
+    }
+
+    /**
+     * Executes the command.
+     */
     @Override
     public void execute() {
-        editor.home();
+        StringBuilder yankBuilder = new StringBuilder();
+        for (int l = 0; l < lines; l++) {
+            try {
+                yankBuilder.append(editor.getContent(editor.getLine() + l)).append("\n");
+            } catch (Exception ex) {
+                //noop
+            }
+            ClipboardUtils.setContnent(yankBuilder.toString());
+        }
     }
 }

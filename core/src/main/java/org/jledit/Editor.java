@@ -77,12 +77,22 @@ public interface Editor<C> extends Closeable {
     /**
      * Moves the cursors to the start of the line.
      */
-    void home();
+    void moveToStartOfLine();
 
     /**
      * Moves cursor to the end of the line.
      */
-    void end();
+    void moveToEndOfLine();
+
+    /**
+     * Moves the cursors to the start of the line.
+     */
+    void moveToStartOfFile();
+
+    /**
+     * Moves cursor to the end of the line.
+     */
+    void moveToEndOfFile();
 
 
     /**

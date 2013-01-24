@@ -275,6 +275,7 @@ public class StringEditor implements Editor<String> {
             String[] contentLines = contentManager.load(source).split("\n|\r");
             lines.addAll(Arrays.asList(contentLines));
         } catch (Exception ex) {
+            lines.add("");
             //noop
         }
         this.line = 1;

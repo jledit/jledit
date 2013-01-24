@@ -28,7 +28,6 @@ import java.util.UUID;
 public final class Files {
 
     static final int BUFFER_SIZE = 4096;
-    static final String TMP_DIR_PROPERTY = "java.io.tmpdir";
 
     private Files() {
         //Utility Class
@@ -45,6 +44,9 @@ public final class Files {
     public static String toString(File file, Charset charset) throws IOException {
         FileInputStream fis = null;
         ByteArrayOutputStream bos = null;
+        if (file == null) {
+            throw new FileNotFoundException("No file specified");
+        }
         try {
             fis = new FileInputStream(file);
             bos = new ByteArrayOutputStream();
@@ -88,7 +90,9 @@ public final class Files {
         FileOutputStream fos = null;
         OutputStreamWriter writer = null;
         try {
-            if (!file.exists() && !file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
+            if (file == null) {
+                throw new FileNotFoundException("No file specified.");
+            } else if (!file.exists() && !file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
                 throw new FileNotFoundException("Could not find or create file:" + file.getName());
             }
             fos = new FileOutputStream(file);

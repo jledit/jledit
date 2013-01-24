@@ -58,12 +58,11 @@ public class GoToCommand implements Command {
                 String[] coords = editor.readLine("Go to:").split(",");
                 if (coords.length == 1) {
                     targetLine = Integer.parseInt(coords[0]);
-                }
-                if (coords.length == 2) {
+                } else if (coords.length == 2) {
                     targetLine = Integer.parseInt(coords[0]);
                     targetColumn = Integer.parseInt(coords[1]);
-                    editor.move(targetLine, targetColumn);
                 }
+                editor.move(targetLine, targetColumn);
             } catch (Exception e) {
                 //noop
             }

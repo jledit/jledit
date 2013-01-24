@@ -1006,6 +1006,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         if (target != null) {
             this.file = target;
             delegate.save(target);
+            displayAs = target;
         } else {
             delegate.save(this.file);
         }

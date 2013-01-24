@@ -36,7 +36,7 @@ public class JlEditUnixTerminal extends TerminalSupport {
         this.setUpControlKeys();
     }
 
-    public void setUpControlKeys() throws Exception {
+    public final void setUpControlKeys() throws Exception {
         settings.set("intr undef");
         //We want to be able to use CTRL-Z for undo
         settings.set("susp undef");

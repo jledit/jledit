@@ -24,6 +24,7 @@ import org.jledit.command.editor.DeleteCommand;
 import org.jledit.command.editor.FindCommand;
 import org.jledit.command.editor.FindNextCommand;
 import org.jledit.command.editor.FindPreviousCommand;
+import org.jledit.command.editor.GoToCommand;
 import org.jledit.command.editor.MoveCursorDownCommand;
 import org.jledit.command.editor.MoveCursorLeftCommand;
 import org.jledit.command.editor.MoveCursorRightCommand;
@@ -67,6 +68,7 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
         supportedOperations.put("^S", "Save");
         supportedOperations.put("^Z", "Undo");
         supportedOperations.put("^R", "Redo");
+        supportedOperations.put("^G", "Go To");
         supportedOperations.put("^F", "Find");
         supportedOperations.put("^N", "Next");
         supportedOperations.put("^P", "Previous");
@@ -204,13 +206,15 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
             case UNDO:
                 return new UndoCommand(this, getUndoContext());
             case REDO:
-                return new RedoCommand(this, getUndoContext());
+                return new RedoCommand(getUndoContext());
             case FIND:
                 return new FindCommand(this);
             case FIND_NEXT:
                 return new FindNextCommand(this, null);
             case FIND_PREVIOUS:
                 return new FindPreviousCommand(this, null);
+            case GOTO:
+                return new GoToCommand(this);
 
         }
         throw new CommandNotFoundException("Could not find command for Operation");
@@ -226,7 +230,7 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
                 null,                               /* Control-D */
                 null,                               /* Control-E */
                 EditorOperationType.FIND,           /* Control-F */
-                null,                               /* Control-G */
+                EditorOperationType.GOTO,           /* Control-G */
                 EditorOperationType.BACKSAPCE,      /* Control-H */
                 null,                               /* Control-I */
                 EditorOperationType.NEWLINE,        /* Control-J */

@@ -19,7 +19,6 @@ import org.jledit.command.undo.UndoContext;
 import org.jledit.command.undo.UndoContextAware;
 import org.jledit.ConsoleEditor;
 
-import java.io.File;
 import java.io.IOException;
 
 public class FileSaveCommand implements Command, UndoContextAware {

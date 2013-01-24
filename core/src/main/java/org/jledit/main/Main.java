@@ -18,8 +18,6 @@ import org.jledit.ConcreteEditorFactory;
 import org.jledit.EditorFactory;
 import org.jledit.ConsoleEditor;
 
-import java.io.File;
-
 public final class Main {
 
     private Main() {

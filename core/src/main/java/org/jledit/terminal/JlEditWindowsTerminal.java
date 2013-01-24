@@ -15,7 +15,6 @@
 package org.jledit.terminal;
 
 import jline.AnsiWindowsTerminal;
-import jline.WindowsTerminal;
 
 import java.io.IOException;
 import java.io.InputStream;

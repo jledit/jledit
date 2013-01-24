@@ -29,7 +29,7 @@ public final class Strings {
      * @param length    The trim length.
      * @return
      */
-    public static final String tryToTrimToSize(String s, int length) {
+    public static String tryToTrimToSize(String s, int length) {
         return tryToTrimToSize(s, length, false);
     }
 
@@ -41,7 +41,7 @@ public final class Strings {
      * @param trimSuffix    Flag the specifies if trimming should be applied to the suffix of the String.
      * @return
      */
-    public static final String tryToTrimToSize(String s, int length, boolean trimSuffix) {
+    public static String tryToTrimToSize(String s, int length, boolean trimSuffix) {
         if (s == null || s.isEmpty()) {
             return s;
         } else if (s.length() <= length) {

@@ -20,16 +20,13 @@ import org.jledit.command.Command;
 
 public class RedoCommand implements UndoContextAware, Command {
 
-    private final ConsoleEditor editor;
     private UndoContext context;
 
-    public RedoCommand(ConsoleEditor editor) {
-        this.editor = editor;
+    public RedoCommand() {
         this.context = new UndoContext();
     }
 
-    public RedoCommand(ConsoleEditor editor, UndoContext context) {
-        this.editor = editor;
+    public RedoCommand(UndoContext context) {
         this.context = context;
     }
 

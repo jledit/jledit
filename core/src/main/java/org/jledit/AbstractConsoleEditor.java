@@ -61,7 +61,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     //Minimum value = 1 and maximum value = terminal height - getHeaderSize() - getFooterSize().
     private int frameLine = 1;
     private int frameColumn = 1;
-    private String encoding;
     private final Terminal terminal;
     private KeyMap keys;
 

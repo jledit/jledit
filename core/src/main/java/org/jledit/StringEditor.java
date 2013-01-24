@@ -15,8 +15,6 @@
 package org.jledit;
 
 
-import org.jledit.utils.Files;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -289,10 +287,10 @@ public class StringEditor implements Editor<String> {
             this.source = target;
         }
 
-        if (source != null) {
-            contentManager.save(getContent(), charset, source);
-        } else {
+        if (source == null) {
             throw new IOException("No target specified for saving.");
+        } else if (!contentManager.save(getContent(), charset, source)) {
+            throw new IOException("Failed to save to target.");
         }
     }
 

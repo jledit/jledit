@@ -31,6 +31,8 @@ package org.jledit.command.editor;
 import org.jledit.ConsoleEditor;
 import org.jledit.command.Command;
 
+import java.io.IOException;
+
 public class GoToCommand implements Command {
 
     private final ConsoleEditor editor;
@@ -38,7 +40,7 @@ public class GoToCommand implements Command {
     private final int column;
 
     public GoToCommand(ConsoleEditor editor) {
-        this(editor, 1, 1);
+        this(editor, 0, 0);
     }
 
     public GoToCommand(ConsoleEditor editor, int line, int column) {
@@ -49,6 +51,24 @@ public class GoToCommand implements Command {
 
     @Override
     public void execute() {
-        editor.move(line, column);
+        if (line == 0 || column == 0) {
+            try {
+                int targetLine = 1;
+                int targetColumn = 1;
+                String[] coords = editor.readLine("Go to:").split(",");
+                if (coords.length == 1) {
+                    targetLine = Integer.parseInt(coords[0]);
+                }
+                if (coords.length == 2) {
+                    targetLine = Integer.parseInt(coords[0]);
+                    targetColumn = Integer.parseInt(coords[1]);
+                    editor.move(targetLine, targetColumn);
+                }
+            } catch (Exception e) {
+                //noop
+            }
+        } else {
+            editor.move(line, column);
+        }
     }
 }

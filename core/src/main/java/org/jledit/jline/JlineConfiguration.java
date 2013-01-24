@@ -26,7 +26,12 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Properties;
 
-public class JlineConfiguration {
+public final class JlineConfiguration {
+
+    private JlineConfiguration(){
+       //Utility Class
+    }
+
     /**
      * System property which can point to a file or URL containing configuration properties to load.
      *

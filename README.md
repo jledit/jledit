@@ -23,20 +23,20 @@ Buidling requires:
 * Java 1.6+
 * Maven 3
 
-    >mvn clean install
+    > mvn clean install
 
 **Running**
 
 Once the build or download is done:
 
-    >cd jledit/target
-    >tar -zxvf jledit-0.1.1-bin.tar.gz
+    > cd jledit/target
+    > tar -zxvf jledit-0.1.1-bin.tar.gz
     > cd jledit-0.1.1
     > ./bin/jledit /path/to/myfile
 
 or on Windows:
 
-    >cd jledit/target
+    > cd jledit/target
     > unzip jledit-0.1.1-bin.zip
     > cd jledit-0.1.1/bin
     > jledit.bat /path/to/myfile

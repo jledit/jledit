@@ -15,7 +15,6 @@
 package org.jledit.utils;
 
 
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,10 +23,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.util.UUID;
 
 public final class Files {
 
     static final int BUFFER_SIZE = 4096;
+    static final String TMP_DIR_PROPERTY = "java.io.tmpdir";
 
     private Files() {
         //Utility Class
@@ -75,6 +76,14 @@ public final class Files {
         return toString(file, null);
     }
 
+    /**
+     * Writes {@link String} content to {@link File}.
+     *
+     * @param file
+     * @param content
+     * @param charset
+     * @throws IOException
+     */
     public static void writeToFile(File file, String content, Charset charset) throws IOException {
         FileOutputStream fos = null;
         OutputStreamWriter writer = null;

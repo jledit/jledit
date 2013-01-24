@@ -45,6 +45,7 @@ public enum EditorOperationType {
     //SEARCH
     FIND,
     FIND_NEXT,
-    FIND_PREVIOUS
+    FIND_PREVIOUS,
+    GOTO
 
 }

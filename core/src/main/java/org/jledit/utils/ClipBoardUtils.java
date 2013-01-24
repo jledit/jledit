@@ -29,7 +29,7 @@
 package org.jledit.utils;
 
 
-import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -60,7 +60,6 @@ public final class ClipboardUtils {
      * @param content
      */
     public static void setContnent(String content) {
-        String result = "";
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         try {
             StringSelection selection = new StringSelection( content );

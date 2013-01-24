@@ -141,7 +141,7 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
                 txt = key + " " + desc;
                 startOfLine = false;
             } else {
-                txt = "     " + key + " " + desc;
+                txt = "    " + key + " " + desc;
             }
             if (txt.length() + sb.length() > getTerminal().getWidth()) {
                 helpLines.add(sb.toString());

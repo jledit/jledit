@@ -125,22 +125,8 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
      */
     @Override
     public void redrawCoords() {
-        saveCursorPosition();
-        JlEditConsole.out.print(ansi().cursor(1, 1));
-        Ansi style = ansi();
-        if (getTheme().getHeaderBackground() != null) {
-            style.bg(getTheme().getHeaderBackground());
-        }
-        if (getTheme().getHeaderForeground() != null) {
-            style.fg(getTheme().getHeaderForeground());
-        }
-
-        String textCoords = "L:" + getLine() + " C:" + getColumn();
-        JlEditConsole.out.print(style);
-        JlEditConsole.out.print(ansi().cursor(1, getTerminal().getWidth() - textCoords.length()));
-        JlEditConsole.out.print(ansi().a(textCoords).reset());
-        JlEditConsole.out.print(ansi().cursor(getTerminal().getHeight(), 1).reset());
-        restoreCursorPosition();
+       //We redraw the full header to prevent glitches with the coordinates.
+       redrawHeader();
     }
 
     private void addHelpLines(List<String> helpLines) {

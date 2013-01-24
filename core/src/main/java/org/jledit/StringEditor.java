@@ -15,11 +15,8 @@
 package org.jledit;
 
 
-import org.jledit.Editor;
-import org.jledit.utils.internal.Charsets;
 import org.jledit.utils.Files;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -30,12 +27,13 @@ import java.util.LinkedList;
  */
 public class StringEditor implements Editor<String> {
 
-    private File file;
+    private String source;
     private Charset charset = Charset.defaultCharset();
     private int line = 1;
     private int column = 1;
     private Boolean dirty = false;
     private final LinkedList<String> lines = new LinkedList<String>();
+    private ContentManager contentManager = new FileContentManager();
 
     public StringEditor() {
         lines.add("");
@@ -271,34 +269,36 @@ public class StringEditor implements Editor<String> {
     }
 
     @Override
-    public synchronized void open(File source) throws IOException {
-        this.file = source;
-        this.charset = Charsets.detect(source);
+    public synchronized void open(String source) throws IOException {
+        this.source = source;
+        this.charset = contentManager.detectCharset(source);
         lines.clear();
-        if (source.exists()) {
-            String[] contentLines = Files.toString(source, charset).split("\n|\r");
+        try {
+            String[] contentLines = contentManager.load(source).split("\n|\r");
             lines.addAll(Arrays.asList(contentLines));
+        } catch (Exception ex) {
+            //noop
         }
         this.line = 1;
         this.column = 1;
     }
 
     @Override
-    public synchronized void save(File target) throws IOException {
+    public synchronized void save(String target) throws IOException {
         if (target != null) {
-            this.file = target;
+            this.source = target;
         }
 
-        if (file != null) {
-            Files.writeToFile(file, getContent(), charset);
+        if (source != null) {
+            contentManager.save(getContent(), charset, source);
         } else {
-            throw new IOException("No file specified for saving.");
+            throw new IOException("No target specified for saving.");
         }
     }
 
     @Override
     public synchronized void close() throws IOException {
-        this.file = null;
+        this.source = null;
         this.charset = null;
         lines.clear();
     }
@@ -328,8 +328,8 @@ public class StringEditor implements Editor<String> {
      * @return
      */
     @Override
-    public File getFile() {
-        return file;
+    public String getSource() {
+        return source;
     }
 
     public Boolean isDirty() {
@@ -338,5 +338,13 @@ public class StringEditor implements Editor<String> {
 
     public void setDirty(Boolean dirty) {
         this.dirty = dirty;
+    }
+
+    public ContentManager getContentManager() {
+        return contentManager;
+    }
+
+    public void setContentManager(ContentManager contentManager) {
+        this.contentManager = contentManager;
     }
 }

@@ -24,6 +24,7 @@ import java.nio.charset.Charset;
 
 public final class Charsets {
 
+    public static final Charset UTF_8 = Charset.forName("UTF-8");
     static final int BUFFER_SIZE = 4096;
 
     private Charsets() {

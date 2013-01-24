@@ -179,9 +179,9 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
             case PASTE:
                 return new PasteCommand(this);
             //Cursor operations
-            case START_OF_LINE:
+            case HOME:
                 return new MoveCursorToStartOfLineCommand(this);
-            case END_OF_LINE:
+            case END:
                 return new MoveCursorToEndOfLineCommand(this);
             case UP:
                 return new MoveCursorUpCommand(this);

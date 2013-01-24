@@ -34,7 +34,6 @@ import org.jledit.theme.Theme;
 import org.jledit.utils.Closeables;
 import org.jledit.utils.JlEditConsole;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -72,7 +71,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     private long escapeTimeout;
     private Reader reader;
 
-    private File file;
+    private String file;
     private String displayAs = "<no file>";
 
     private String title = EDITOR_NAME;
@@ -990,7 +989,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     }
 
     @Override
-    public void open(File source, String displayAs) throws IOException {
+    public void open(String source, String displayAs) throws IOException {
         this.displayAs = displayAs;
         this.file = source;
         delegate.open(source);
@@ -999,12 +998,12 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     }
 
     @Override
-    public void open(File source) throws IOException {
-        open(source, source.getPath());
+    public void open(String source) throws IOException {
+        open(source, source);
     }
 
     @Override
-    public void save(File target) throws IOException {
+    public void save(String target) throws IOException {
         if (target != null) {
             this.file = target;
             delegate.save(target);
@@ -1045,7 +1044,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         return delegate.getContent(line);
     }
 
-    public File getFile() {
+    public String getSource() {
         return file;
     }
 
@@ -1087,6 +1086,24 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     @Override
     public void setDirty(Boolean dirty) {
         delegate.setDirty(dirty);
+    }
+
+    /**
+     * Sets the {@link org.jledit.ContentManager}.
+     * @return
+     */
+    @Override
+    public ContentManager getContentManager() {
+        return delegate.getContentManager();
+    }
+
+    /**
+     * Returns the {@link org.jledit.ContentManager}.
+     * @param contentManager
+     */
+    @Override
+    public void setContentManager(ContentManager contentManager) {
+        delegate.setContentManager(contentManager);
     }
 
     public int getHeaderSize() {

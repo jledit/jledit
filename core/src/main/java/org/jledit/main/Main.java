@@ -32,7 +32,7 @@ public final class Main {
             EditorFactory factory = new ConcreteEditorFactory();
             editor = factory.create();
             if (fileName != null) {
-                editor.open(new File(fileName));
+                editor.open(fileName);
             }
             editor.start();
         } catch (Exception e) {

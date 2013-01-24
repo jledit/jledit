@@ -37,7 +37,7 @@ public interface Editor<C> extends Closeable {
      * @param source
      * @throws IOException
      */
-    void open(File source) throws IOException;
+    void open(String source) throws IOException;
 
     /**
      * Saves the file.
@@ -45,7 +45,7 @@ public interface Editor<C> extends Closeable {
      * @param target
      * @throws IOException
      */
-    void save(File target) throws IOException;
+    void save(String target) throws IOException;
 
     /**
      * Returns the number of the current line.
@@ -180,6 +180,18 @@ public interface Editor<C> extends Closeable {
      *
      * @return
      */
-    File getFile();
+    String getSource();
+
+    /**
+     * Sets the {@link ContentManager}.
+     * @return
+     */
+    ContentManager getContentManager();
+
+    /**
+     * Returns the {@link ContentManager}.
+     * @param contentManager
+     */
+    void setContentManager(ContentManager contentManager);
 
 }

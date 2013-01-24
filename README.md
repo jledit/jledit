@@ -11,6 +11,7 @@ It works as a standalone editor, but it can also be use from jline based applica
 * Scrolling
 * Undo / Redo functionality
 * Forward & Backward searching and highlighting
+* Pluggable content manager, to be able to edit not just files (e.g. blobs, zookeeper znodes, config admin pids etc).
 * Color themes
 
 **Building**

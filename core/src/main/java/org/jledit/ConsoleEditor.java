@@ -17,7 +17,6 @@ package org.jledit;
 import jline.Terminal;
 import org.jledit.theme.Theme;
 
-import java.io.File;
 import java.io.IOException;
 
 public interface ConsoleEditor extends Editor<String>, InputReader, LifeCycle {
@@ -29,7 +28,7 @@ public interface ConsoleEditor extends Editor<String>, InputReader, LifeCycle {
      * @param displayAs The display String (if flavor supports it).
      * @throws IOException
      */
-    void open(File source, String displayAs) throws IOException;
+    void open(String source, String displayAs) throws IOException;
 
 
     /**

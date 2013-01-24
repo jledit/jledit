@@ -45,15 +45,15 @@ public class FileOpenCommand implements Command, UndoContextAware {
                 }
 
                 if (fileName == null || fileName.isEmpty()) {
-                    String f = editor.readLine("Open file:");
+                    String f = editor.readLine("Open:");
                     undoContext.clear();
-                    editor.open(new File(f));
+                    editor.open(f);
                     editor.redrawText();
                     editor.redrawHeader();
                     editor.redrawFooter();
                 } else {
                     undoContext.clear();
-                    editor.open(new File(fileName));
+                    editor.open(fileName);
                 }
             } catch (IOException e) {
                 //noop

@@ -18,6 +18,8 @@ package org.jledit;
 import jline.Terminal;
 import org.jledit.utils.Resources;
 
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -77,10 +79,25 @@ public class ConcreteEditorFactory implements EditorFactory {
      */
     @Override
     public ConsoleEditor create(String flavor, Terminal terminal) throws EditorInitializationException {
+        return create(flavor, terminal, System.in, System.out);
+    }
+
+
+    /**
+     * Creates a {@link ConsoleEditor} based on the specified flavor & {@link jline.Terminal}.
+     *
+     * @param flavor
+     * @param terminal
+     * @return
+     * @throws org.jledit.EditorInitializationException
+     *
+     */
+    @Override
+    public ConsoleEditor create(String flavor, Terminal terminal, InputStream in, PrintStream out) throws EditorInitializationException {
         if (flavorMap.containsKey(flavor)) {
             Class<? extends ConsoleEditor> editorClass = flavorMap.get(flavor);
             try {
-                return instantiate(editorClass, terminal);
+                return instantiate(editorClass, terminal, in, out);
             } catch (Exception e) {
                 throw new EditorInitializationException("Failed to create Editor instance of class:" + editorClass.getName(), e);
             }
@@ -134,9 +151,9 @@ public class ConcreteEditorFactory implements EditorFactory {
      * @throws InstantiationException
      * @throws NoSuchMethodException
      */
-    private ConsoleEditor instantiate(Class<? extends ConsoleEditor> editorClass, Terminal terminal) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
-        Constructor constructor = editorClass.getConstructor(Terminal.class);
-        return (ConsoleEditor) constructor.newInstance(terminal);
+    private ConsoleEditor instantiate(Class<? extends ConsoleEditor> editorClass, Terminal terminal, InputStream in , PrintStream out) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+        Constructor constructor = editorClass.getConstructor(Terminal.class, InputStream.class, PrintStream.class);
+        return (ConsoleEditor) constructor.newInstance(terminal, in , out);
     }
 
     /**

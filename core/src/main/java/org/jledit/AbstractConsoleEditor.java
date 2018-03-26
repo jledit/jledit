@@ -36,6 +36,7 @@ import org.jledit.utils.JlEditConsole;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.io.Reader;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -84,8 +85,11 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     private Editor<String> delegate = new StringEditor();
     private Theme theme = new DefaultTheme();
 
-    public AbstractConsoleEditor(final Terminal term) throws Exception {
+    private final JlEditConsole console;
+
+    public AbstractConsoleEditor(final Terminal term, InputStream in, PrintStream out) throws Exception {
         this.terminal = JlEditTerminalFactory.get(term);
+        this.console = new JlEditConsole(in, out, out);
     }
 
     public final void init() throws Exception {
@@ -113,7 +117,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
      * This methods actually creates the {@link Reader}.
      */
     public void start() {
-        JlEditConsole.systemInstall();
         running = true;
         try {
             init();
@@ -136,7 +139,6 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
      */
     public void stop() {
         hide();
-        JlEditConsole.systemUninstall();
         running = false;
         Closeables.closeQuitely(reader);
         Closeables.closeQuitely(in);
@@ -157,13 +159,13 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
      * Hides the editor screen and restore the {@link Terminal}.
      */
     public void hide() {
-        JlEditConsole.out.print("\33[" + 1 + ";" + terminal.getHeight() + ";r");
+        console.out().print("\33[" + 1 + ";" + terminal.getHeight() + ";r");
         //Erase screen doesn't behave well on windows.
         for (int l = 1; l <= terminal.getHeight(); l++) {
-            JlEditConsole.out.print(ansi().cursor(l, 1));
-            JlEditConsole.out.print(ansi().eraseLine(Erase.FORWARD));
+            console.out().print(ansi().cursor(l, 1));
+            console.out().print(ansi().eraseLine(Erase.FORWARD));
         }
-        JlEditConsole.out.print(ansi().cursor(1, 1));
+        console.out().print(ansi().cursor(1, 1));
         flush();
         try {
             terminal.restore();
@@ -213,11 +215,11 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             style.fg(getTheme().getPromptForeground());
         }
         for (int i = 1; i <= getFooterSize(); i++) {
-            JlEditConsole.out.print(ansi().cursor(terminal.getHeight() - getFooterSize() + i, 1));
-            JlEditConsole.out.print(style.eraseLine(Ansi.Erase.FORWARD));
+            console.out().print(ansi().cursor(terminal.getHeight() - getFooterSize() + i, 1));
+            console.out().print(style.eraseLine(Ansi.Erase.FORWARD));
         }
-        JlEditConsole.out.print(ansi().cursor(terminal.getHeight(), 1));
-        JlEditConsole.out.print(style.a(message).bold().eraseLine(Ansi.Erase.FORWARD));
+        console.out().print(ansi().cursor(terminal.getHeight(), 1));
+        console.out().print(style.a(message).bold().eraseLine(Ansi.Erase.FORWARD));
         restoreCursorPosition();
         flush();
         try {
@@ -257,15 +259,15 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 case DELETE:
                     if (lineBuilder.length() > 0) {
                         lineBuilder.delete(lineBuilder.length() - 1, lineBuilder.length());
-                        JlEditConsole.out.print(Ansi.ansi().cursorLeft(1));
-                        JlEditConsole.out.print(" ");
-                        JlEditConsole.out.print(Ansi.ansi().cursorLeft(1));
+                        console.out().print(Ansi.ansi().cursorLeft(1));
+                        console.out().print(" ");
+                        console.out().print(Ansi.ansi().cursorLeft(1));
                     }
                     break;
                 case NEWLINE:
                     return lineBuilder.toString();
                 case TYPE:
-                    JlEditConsole.out.print(operation.getInput());
+                    console.out().print(operation.getInput());
                     lineBuilder.append(operation.getInput());
                     break;
             }
@@ -284,17 +286,17 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             style.fg(getTheme().getPromptForeground());
         }
         for (int i = 1; i <= getFooterSize(); i++) {
-            JlEditConsole.out.print(ansi().cursor(terminal.getHeight() - getFooterSize() + i, 1));
-            JlEditConsole.out.print(style.eraseLine(Ansi.Erase.FORWARD));
+            console.out().print(ansi().cursor(terminal.getHeight() - getFooterSize() + i, 1));
+            console.out().print(style.eraseLine(Ansi.Erase.FORWARD));
         }
-        JlEditConsole.out.print(ansi().cursor(terminal.getHeight(), 1));
-        JlEditConsole.out.print(ansi().cursor(terminal.getHeight(), 1));
-        JlEditConsole.out.print(style.a(message).bold().eraseLine(Ansi.Erase.FORWARD));
+        console.out().print(ansi().cursor(terminal.getHeight(), 1));
+        console.out().print(ansi().cursor(terminal.getHeight(), 1));
+        console.out().print(style.a(message).bold().eraseLine(Ansi.Erase.FORWARD));
         flush();
         try {
             result = readLine();
         } finally {
-            JlEditConsole.out.print(ansi().reset());
+            console.out().print(ansi().reset());
             restoreCursorPosition();
             redrawFooter();
         }
@@ -379,9 +381,9 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
      */
     void repaintScreen() {
         int repaintLine = 1;
-        JlEditConsole.out.print(ansi().eraseScreen(Erase.ALL));
-        JlEditConsole.out.print(ansi().cursor(1, 1));
-        JlEditConsole.out.print("\33[" + (getHeaderSize() + 1) + ";" + (terminal.getHeight() - getFooterSize()) + ";r");
+        console.out().print(ansi().eraseScreen(Erase.ALL));
+        console.out().print(ansi().cursor(1, 1));
+        console.out().print("\33[" + (getHeaderSize() + 1) + ";" + (terminal.getHeight() - getFooterSize()) + ";r");
         redrawHeader();
         redrawFooter();
         LinkedList<String> linesToDisplay = new LinkedList<String>();
@@ -392,11 +394,11 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         }
 
         for (int i = 0; i < terminal.getHeight() - getHeaderSize() - getFooterSize(); i++) {
-            JlEditConsole.out.print(ansi().cursor(repaintLine + getHeaderSize(), 1));
+            console.out().print(ansi().cursor(repaintLine + getHeaderSize(), 1));
             displayText(linesToDisplay.get(i));
             repaintLine++;
         }
-        JlEditConsole.out.print(ansi().cursor(2, 1));
+        console.out().print(ansi().cursor(2, 1));
     }
 
     /**
@@ -416,8 +418,8 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
         saveCursorPosition();
         for (int l = 0; l < Math.min(maxLinesToRepaint, toRepaintLines.size()); l++) {
-            JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize() + l, 1));
-            JlEditConsole.out.print(ansi().eraseLine(Erase.FORWARD));
+            console.out().print(ansi().cursor(frameLine + getHeaderSize() + l, 1));
+            console.out().print(ansi().eraseLine(Erase.FORWARD));
             displayText(toRepaintLines.get(l));
         }
         restoreCursorPosition();
@@ -448,8 +450,8 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
         saveCursorPosition();
         for (int l = 0; l < linesToRepaint; l++) {
-            JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize() + l, 1));
-            JlEditConsole.out.print(ansi().eraseLine(Erase.FORWARD));
+            console.out().print(ansi().cursor(frameLine + getHeaderSize() + l, 1));
+            console.out().print(ansi().eraseLine(Erase.FORWARD));
             if (toRepaintLines.size() > l) {
                 displayText(toRepaintLines.get(l));
             } else {
@@ -527,9 +529,9 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 if (frameLine <= 0) {
                     frameLine = 1;
                     scrollDown(1);
-                    JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), 1));
+                    console.out().print(ansi().cursor(frameLine + getHeaderSize(), 1));
                     displayText(toDisplayLines.get(l));
-                    JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), getColumn()));
+                    console.out().print(ansi().cursor(frameLine + getHeaderSize(), getColumn()));
                 }
 
                 int actualColumn = getColumn();
@@ -537,7 +539,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                     actualColumn -= terminal.getWidth();
                 }
                 frameColumn = actualColumn;
-                JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
+                console.out().print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
             }
         }
     }
@@ -561,9 +563,9 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 if (frameLine >= terminal.getHeight() - getFooterSize()) {
                     frameLine = terminal.getHeight() - getHeaderSize() - getFooterSize();
                     scrollUp(1);
-                    JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), 1));
+                    console.out().print(ansi().cursor(frameLine + getHeaderSize(), 1));
                     displayText(toDisplayLines.get(l));
-                    JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), getColumn()));
+                    console.out().print(ansi().cursor(frameLine + getHeaderSize(), getColumn()));
                 }
 
                 int actualColumn = getColumn();
@@ -571,7 +573,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                     actualColumn -= terminal.getWidth();
                 }
                 frameColumn = actualColumn;
-                JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
+                console.out().print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
             }
         }
     }
@@ -625,7 +627,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 delegate.move(getLine(), getColumn() - 1);
             }
         }
-        JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
+        console.out().print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
     }
 
     public void moveRight(int offset) {
@@ -650,9 +652,9 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 if (frameLine >= terminal.getHeight() - getFooterSize()) {
                     frameLine = terminal.getHeight() - getHeaderSize() - getFooterSize();
                     scrollUp(1);
-                    JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), 1));
+                    console.out().print(ansi().cursor(frameLine + getHeaderSize(), 1));
                     displayText(toDisplayLines.get(0));
-                    JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), getColumn()));
+                    console.out().print(ansi().cursor(frameLine + getHeaderSize(), getColumn()));
                 }
                 delegate.move(getLine(), getColumn() + 1);
             } else {
@@ -660,7 +662,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 delegate.move(getLine(), getColumn() + 1);
             }
         }
-        JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
+        console.out().print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
     }
 
     /**
@@ -681,12 +683,12 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             if (frameLine >= terminal.getHeight() - getFooterSize()) {
                 frameLine = terminal.getHeight() - getHeaderSize() - getFooterSize();
                 scrollUp(1);
-                JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), 1));
+                console.out().print(ansi().cursor(frameLine + getHeaderSize(), 1));
                 displayText(toDisplayLines.get(l));
-                JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), getColumn()));
+                console.out().print(ansi().cursor(frameLine + getHeaderSize(), getColumn()));
             }
         }
-        JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
+        console.out().print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
     }
 
     /**
@@ -706,12 +708,12 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             if (frameLine <= 0) {
                 frameLine = 1;
                 scrollDown(1);
-                JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), 1));
+                console.out().print(ansi().cursor(frameLine + getHeaderSize(), 1));
                 displayText(toDisplayLines.get(l));
-                JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), getColumn()));
+                console.out().print(ansi().cursor(frameLine + getHeaderSize(), getColumn()));
             }
         }
-        JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
+        console.out().print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
     }
 
 
@@ -757,8 +759,8 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             frameColumn += str.length();
             if (frameColumn > terminal.getWidth()) {
                 int current = (startingFromColumn - 1) / terminal.getWidth();
-                JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), 1));
-                JlEditConsole.out.print(ansi().eraseLine(Erase.FORWARD));
+                console.out().print(ansi().cursor(frameLine + getHeaderSize(), 1));
+                console.out().print(ansi().eraseLine(Erase.FORWARD));
                 displayText(toDisplayLines.get(current));
                 frameLine += frameColumn / terminal.getWidth();
                 frameColumn -= str.length();
@@ -779,13 +781,13 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 frameColumn -= terminal.getWidth();
             }
 
-            JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
+            console.out().print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
         }
     }
 
     @Override
     public String delete() {
-        JlEditConsole.out.print(ansi().eraseLine(Erase.FORWARD));
+        console.out().print(ansi().eraseLine(Erase.FORWARD));
         String r = delegate.delete();
         if (r.equals(NEW_LINE) || r.equals(CARRIEGE_RETURN)) {
             redrawRestOfScreen();
@@ -820,14 +822,14 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 scrollDown(1);
             }
             //Redraw previous line
-            JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), 1));
-            JlEditConsole.out.print(ansi().eraseLine(Erase.FORWARD));
+            console.out().print(ansi().cursor(frameLine + getHeaderSize(), 1));
+            console.out().print(ansi().eraseLine(Erase.FORWARD));
             displayText(toDisplayLines.get(multiLineNumber - 1));
             //Redraw current line
-            JlEditConsole.out.print(ansi().cursor(frameLine + 2, 1));
-            JlEditConsole.out.print(ansi().eraseLine(Erase.FORWARD));
+            console.out().print(ansi().cursor(frameLine + 2, 1));
+            console.out().print(ansi().eraseLine(Erase.FORWARD));
             displayText(toDisplayLines.get(multiLineNumber));
-            JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
+            console.out().print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
 
             redrawRestOfScreen();
         } else {
@@ -836,15 +838,15 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
             frameColumn--;
             //If we have a a simple line.
             if (currentLine.length() < terminal.getWidth()) {
-                JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), getColumn()));
-                JlEditConsole.out.print(ansi().eraseLine(Erase.FORWARD));
+                console.out().print(ansi().cursor(frameLine + getHeaderSize(), getColumn()));
+                console.out().print(ansi().eraseLine(Erase.FORWARD));
                 String modifiedLine = getContent(getLine());
                 displayText(modifiedLine.substring(getColumn() - 1));
                 //Line is multi line and we will need to swift chars.
             } else {
                 redrawRestOfScreen();
             }
-            JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
+            console.out().print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
         }
         return b;
     }
@@ -852,7 +854,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     @Override
     public void newLine() {
         delegate.newLine();
-        JlEditConsole.out.print(ansi().eraseLine(Erase.FORWARD));
+        console.out().print(ansi().eraseLine(Erase.FORWARD));
         frameColumn = 1;
         frameLine++;
         if (frameLine > terminal.getHeight() - getHeaderSize() - getFooterSize()) {
@@ -861,7 +863,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
         }
         redrawRestOfScreen();
-        JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
+        console.out().print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
     }
 
     @Override
@@ -874,7 +876,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         }
         delegate.mergeLine();
         redrawRestOfScreen();
-        JlEditConsole.out.print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
+        console.out().print(ansi().cursor(frameLine + getHeaderSize(), frameColumn));
     }
 
     /**
@@ -927,7 +929,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         if (WindowsTerminal.class.isAssignableFrom(terminal.getClass())) {
             redrawText();
         } else {
-            JlEditConsole.out.print(ansi().scrollUp(rows));
+            console.out().print(ansi().scrollUp(rows));
         }
     }
 
@@ -936,7 +938,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         if (WindowsTerminal.class.isAssignableFrom(terminal.getClass())) {
             redrawText();
         } else {
-            JlEditConsole.out.print(ansi().scrollDown(rows));
+            console.out().print(ansi().scrollDown(rows));
         }
     }
 
@@ -948,9 +950,9 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     protected void displayText(String text) {
         if (highLight != null && !highLight.isEmpty() && text.contains(highLight)) {
             String highLightedText = text.replaceAll(highLight, ansi().bold().bg(theme.getHighLightBackground()).fg(theme.getHighLightForeground()).a(highLight).boldOff().reset().toString());
-            JlEditConsole.out.print(highLightedText);
+            console.out().print(highLightedText);
         } else {
-            JlEditConsole.out.print(text);
+            console.out().print(text);
         }
     }
 
@@ -963,7 +965,7 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
         for (int i = 0; i < terminal.getWidth(); i++) {
             sb.append(" ");
         }
-        JlEditConsole.out.print(sb.toString());
+        console.out().print(sb.toString());
     }
 
     @Override
@@ -975,12 +977,12 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
     public void restoreCursorPosition() {
         Coordinates coordinates = cursorPositions.pop();
         if (coordinates != null) {
-            JlEditConsole.out.print(ansi().cursor(coordinates.getLine() + getHeaderSize(), coordinates.getColumn()));
+            console.out().print(ansi().cursor(coordinates.getLine() + getHeaderSize(), coordinates.getColumn()));
         }
     }
 
     public void flush() {
-        JlEditConsole.out.flush();
+        console.out().flush();
     }
 
     protected void highLight(String text) {
@@ -1172,5 +1174,9 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
 
     public void setDisplayAs(String displayAs) {
         this.displayAs = displayAs;
+    }
+
+    public JlEditConsole getConsole() {
+        return console;
     }
 }

@@ -126,6 +126,8 @@ public abstract class AbstractConsoleEditor implements ConsoleEditor, CommandFac
                 if (operation != null) {
                     Command cmd = create(operation);
                     onCommand(cmd);
+                } else {
+                    break;
                 }
             }
         } catch (Exception e) {

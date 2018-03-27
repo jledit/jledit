@@ -43,10 +43,11 @@ import org.jledit.command.undo.UndoCommand;
 import org.jledit.AbstractConsoleEditor;
 import org.jledit.EditorOperation;
 import org.jledit.EditorOperationType;
-import org.jledit.utils.JlEditConsole;
 import org.jledit.utils.Strings;
 import org.jledit.utils.internal.KeyMaps;
 
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,8 +61,8 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
     private final List<String> helpLines = new LinkedList<String>();
 
 
-    public SimpleConsoleEditor(Terminal terminal) throws Exception {
-        super(terminal);
+    public SimpleConsoleEditor(Terminal terminal, InputStream in, PrintStream out) throws Exception {
+        super(terminal, in, out);
         setKeys(createKeyMap());
         supportedOperations.put("^O", "Open");
         supportedOperations.put("^X", "Quit");
@@ -78,7 +79,7 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
 
     public void redrawHeader() {
         saveCursorPosition();
-        JlEditConsole.out.print(ansi().cursor(1, 1));
+        getConsole().out().print(ansi().cursor(1, 1));
         Ansi style = ansi();
         if (getTheme().getHeaderBackground() != null) {
             style.bg(getTheme().getHeaderBackground());
@@ -88,10 +89,10 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
         }
         String textCoords = "L:" + getLine() + " C:" + getColumn();
         int displayFileLength = getTerminal().getWidth() - getTitle().length() - textCoords.length() - 1;
-        JlEditConsole.out.print(style.a(getTitle()).a(":").a(Strings.tryToTrimToSize(getDisplayAs(), displayFileLength)).a(isDirty() ? DIRTY_SIGN : "").eraseLine(Ansi.Erase.FORWARD));
-        JlEditConsole.out.print(ansi().cursor(1, getTerminal().getWidth() - textCoords.length()));
-        JlEditConsole.out.print(ansi().a(textCoords).reset());
-        JlEditConsole.out.print(ansi().cursor(getTerminal().getHeight(), 1));
+        getConsole().out().print(style.a(getTitle()).a(":").a(Strings.tryToTrimToSize(getDisplayAs(), displayFileLength)).a(isDirty() ? DIRTY_SIGN : "").eraseLine(Ansi.Erase.FORWARD));
+        getConsole().out().print(ansi().cursor(1, getTerminal().getWidth() - textCoords.length()));
+        getConsole().out().print(ansi().a(textCoords).reset());
+        getConsole().out().print(ansi().cursor(getTerminal().getHeight(), 1));
         restoreCursorPosition();
     }
 
@@ -107,16 +108,16 @@ public class SimpleConsoleEditor extends AbstractConsoleEditor {
         if (getTheme().getFooterForeground() != null) {
             style.fg(getTheme().getFooterForeground());
         }
-        JlEditConsole.out.print(style);
-        JlEditConsole.out.print(ansi().cursor(getTerminal().getHeight() + 1 - getFooterSize(), 1).eraseLine(Ansi.Erase.FORWARD));
+        getConsole().out().print(style);
+        getConsole().out().print(ansi().cursor(getTerminal().getHeight() + 1 - getFooterSize(), 1).eraseLine(Ansi.Erase.FORWARD));
         for (int i = 1; i <= helpLines.size(); i++) {
             String helpLine = helpLines.get(i - 1);
             int startColumn = (getTerminal().getWidth() - helpLine.length()) / 2;
-            JlEditConsole.out.print(ansi().cursor(getTerminal().getHeight() + 1 - getFooterSize() + i, 1).eraseLine(Ansi.Erase.FORWARD));
-            JlEditConsole.out.print(ansi().cursor(getTerminal().getHeight() + 1 - getFooterSize() + i, startColumn));
-            JlEditConsole.out.print(helpLine);
+            getConsole().out().print(ansi().cursor(getTerminal().getHeight() + 1 - getFooterSize() + i, 1).eraseLine(Ansi.Erase.FORWARD));
+            getConsole().out().print(ansi().cursor(getTerminal().getHeight() + 1 - getFooterSize() + i, startColumn));
+            getConsole().out().print(helpLine);
         }
-        JlEditConsole.out.print(ansi().reset());
+        getConsole().out().print(ansi().reset());
         restoreCursorPosition();
     }
 

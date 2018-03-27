@@ -16,7 +16,10 @@ package org.jledit.utils;
 
 
 import java.io.BufferedOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.fusesource.jansi.AnsiConsole.wrapOutputStream;
 
@@ -25,17 +28,23 @@ import static org.fusesource.jansi.AnsiConsole.wrapOutputStream;
  */
 public final class JlEditConsole {
 
-    private JlEditConsole() {
-        //Utility Class
+    private final InputStream in;
+    private final PrintStream out;
+    private final PrintStream err;
+
+    public JlEditConsole() {
+        this.in = System.in;
+        this.out  = new PrintStream(new BufferedOutputStream(wrapOutputStream(System.out), 1024), false);
+        this.err = new PrintStream(new BufferedOutputStream(wrapOutputStream(System.err), 1024), false);
     }
 
-    public static final PrintStream system_out = System.out;
-    public static final PrintStream out = new PrintStream(new BufferedOutputStream(wrapOutputStream(system_out), 1024), false);
+    public JlEditConsole(InputStream in, PrintStream out, PrintStream err) {
+        this.in = in;
+        this.out = out;
+        this.err = err;
+    }
 
-    public static final PrintStream system_err = System.err;
-    public static final PrintStream err = new PrintStream(new BufferedOutputStream(wrapOutputStream(system_err), 1024), false);
-
-    private static int installed;
+    private static AtomicInteger installed = new AtomicInteger();
 
 
     /**
@@ -46,7 +55,7 @@ public final class JlEditConsole {
      *
      * @return a PrintStream which is ANSI aware.
      */
-    public static PrintStream out() {
+    public PrintStream out() {
         return out;
     }
 
@@ -58,31 +67,7 @@ public final class JlEditConsole {
      *
      * @return a PrintStream which is ANSI aware.
      */
-    public static PrintStream err() {
+    public PrintStream err() {
         return err;
-    }
-
-    /**
-     * Install Console.out to System.out.
-     */
-    synchronized static public void systemInstall() {
-        installed++;
-        if (installed == 1) {
-            System.setOut(out);
-            System.setErr(err);
-        }
-    }
-
-    /**
-     * undo a previous {@link #systemInstall()}.  If {@link #systemInstall()} was called
-     * multiple times, it {@link #systemUninstall()} must call the same number of times before
-     * it is actually uninstalled.
-     */
-    synchronized public static void systemUninstall() {
-        installed--;
-        if (installed == 0) {
-            System.setOut(system_out);
-            System.setErr(system_err);
-        }
     }
 }

@@ -16,6 +16,9 @@ package org.jledit;
 
 import jline.Terminal;
 
+import java.io.InputStream;
+import java.io.PrintStream;
+
 public interface EditorFactory {
 
     /**
@@ -51,6 +54,19 @@ public interface EditorFactory {
      * @throws EditorInitializationException
      */
     ConsoleEditor create(String flavor, Terminal terminal) throws EditorInitializationException;
+
+
+    /**
+     * Creates a {@link ConsoleEditor} based on the specified flavor & {@link Terminal}.
+     *
+     * @param flavor
+     * @param terminal
+     * @param in
+     * @param out
+     * @return
+     * @throws EditorInitializationException
+     */
+    ConsoleEditor create(String flavor, Terminal terminal, InputStream in, PrintStream out) throws EditorInitializationException;
 
     /**
      * Binds the specified flavor to the specified class.
